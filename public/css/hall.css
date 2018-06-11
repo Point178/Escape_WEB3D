@@ -1,0 +1,22 @@
+.add{
+    border: 0px; /*去边框*/
+    width: 60px; /*宽*/
+    height: 60px;/*高*/
+    background-image:url(../image/add.png);/*背景图片*/
+    background-size:cover;
+    background-repeat: no-repeat;
+    color: white;
+    position:absolute;
+    right:30px;
+    bottom:30px;
+}
+
+.room{
+    border: 0px; /*去边框*/
+    margin: 20px;
+    width: 200px; /*宽*/
+    height: 160px;/*高*/
+    background-image:url(../image/login_background.jpeg);/*背景图片*/
+    background-size:cover;
+    background-repeat: no-repeat;
+}

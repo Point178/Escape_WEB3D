@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> 大厅</title>
+    <link href="css/hall.css" rel="stylesheet">
+
+</head>
+<body id="body">
+<div id="content">
+    <SCRIPT LANGUAGE="JavaScript">
+        function reP() {
+            document.getElementById("content").innerHTML += "<button class=\"room\" id=\"room\" style='display:inline-block' width=\"160px\" hight=\"200px\" onclick=\"location='game.html'\">房间</button>";
+        }
+    </SCRIPT>
+    <button name="add" class="add" onclick="reP()"></button>
+</div>
+</body>
+</html>
