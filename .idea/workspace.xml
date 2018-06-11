@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f3a98935-a939-469c-8118-70532eb7121d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/public/css/hall.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/hall.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/image/add.png" afterDir="false" />
-    </list>
+    <list default="true" id="f3a98935-a939-469c-8118-70532eb7121d" name="Default" comment="" />
     <ignored path="Escape.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -67,7 +63,8 @@
       <file leaf-file-name="hall.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/hall.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="285">
+              <caret line="15" column="42" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
               <folding>
                 <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
               </folding>
@@ -283,10 +280,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58470000" />
+    <option name="totallyTimeSpent" value="59035000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
@@ -612,7 +610,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/hall.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="285">
+          <caret line="15" column="42" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
           <folding>
             <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
           </folding>
