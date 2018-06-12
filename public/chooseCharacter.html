@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,14 @@
         欢迎来到密室逃脱游戏
     </nav>
     <nav id="myAccount">
-        <span id="hello">您好！</span>
+        <script>
+            var url = decodeURI(window.location.href);
+
+            var argsIndex = url .split("?name=");
+            var arg = argsIndex[1];
+            document.write("<span id=\"hello\">您好！"+arg+"</span>")
+        </script>
+
         <span id="out"><a href="/logout">登出</a></span>
     </nav>
 </div>
