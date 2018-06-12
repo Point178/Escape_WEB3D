@@ -11,7 +11,7 @@ var mysql=require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '970511',
+    password : '123456',
     database : 'escape',
     port:'3306'
 });
@@ -36,7 +36,7 @@ app.get('/register',function (req,res) {
     connection.query('insert into users set ?',user,function (err,rs) {
         if (err) throw  err;
         console.log('ok');
-        res.sendFile(__dirname + "/" + "hall.html"  );
+        res.sendFile(__dirname + "/" + "chooseCharacter.html"  );
     })
 })
 
@@ -48,7 +48,7 @@ app.post('/login',function (req,res) {
         if (err) throw err;
         console.log(rs);
         console.log('OK');
-        res.sendFile(__dirname + "/" + "hall.html" );
+        res.sendFile(__dirname + "/" + "chooseCharacter.html" );
     })
 })
 
