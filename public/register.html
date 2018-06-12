@@ -8,16 +8,12 @@
     <title> 注册</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
     <script>
         if (window.top !== window.self) {
             window.top.location = window.location;
         }
     </script>
-    <script src="Alert.js"></script>
-
+    <script src="register_bundle.js"></script>
 
 </head>
 
@@ -26,7 +22,7 @@
     <div class="row">
         <div class="col-sm-12">
 
-            <form class="m-t" role="form" method="post" action="register.php" onsubmit="return InputCheck(this)">
+            <form class="m-t" role="form" method="get" action="" onsubmit="return InputCheck(this)">
                 <h4 class="no-margins">注册：</h4>
                 <p class="m-t-md">请完成注册</p>
                 <div class="form-group">
@@ -35,7 +31,7 @@
                 <div class="form-group">
                     <input type="password" name="password" class="form-control" placeholder="密码" required="">
                 </div>
-                <button type="submit" name="submit" class="btn btn-primary block full-width m-b">注 册</button>
+                <button id="registerSubmit" type="submit" name="submit" class="btn btn-primary block full-width m-b">注 册</button>
 
                 <p class="text-muted text-center"><a href="login.html">已有账号，去登录</a>
                 </p>

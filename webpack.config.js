@@ -5,7 +5,9 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        game: __dirname + "/app/main.js"
+        game: __dirname + "/app/main.js",
+        register:__dirname+"/app/register.js",
+        login:__dirname+"/app/login.js"
     },
     output: {
         path: __dirname + "/public",
