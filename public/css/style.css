@@ -53,3 +53,42 @@ body.signin {
         width:auto;
     }
 }
+
+nav{
+    display: inline-block;
+}
+
+#topHeaderRow {
+    background: #80bdff;
+    font-size: 20px;
+    color: white;
+    text-align: left;
+    padding-right: 0;
+    padding-bottom: 1%;
+    padding-top: 1%;
+}
+
+#welcome{
+    margin-left: 10pt;
+}
+#myAccount{
+    float:right;
+    padding-right: 3px;
+}
+
+#hello{
+    padding-right: 20pt;
+}
+
+#out{
+    padding-right: 20pt;
+}
+a{
+    font-size: 20px;
+    color: white;
+    text-align: left;
+    padding-right: 0;
+    padding-bottom: 1%;
+    padding-top: 1%;
+    text-decoration: none;
+}
