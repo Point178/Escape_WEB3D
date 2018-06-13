@@ -45,10 +45,15 @@ app.get('/register',function (req,res) {
     var  pwd=req.query.password;
     var  user={userName:name,password:pwd};
     connection.query('insert into users set ?',user,function (err,rs) {
-        if (err) throw  err;
-        console.log('ok');
-        res.redirect(301,'http://localhost:8888/chooseCharacter.html?name='+name);
-
+        if (err){
+            console.log('fail');
+            res.redirect(301, 'http://localhost:8888/registerFailed.html');
+        }
+        else {
+            console.log('ok');
+            res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
+            loginFailed.html
+        }
         //res.sendFile(__dirname + "/" + "chooseCharacter.html");
         //res.send(name);
     })
@@ -59,10 +64,15 @@ app.post('/login',function (req,res) {
     var pwd=req.query.password;
     var selectSQL = "select * from users where userName = '"+name+"' and password = '"+pwd+"'";
     connection.query(selectSQL,function (err,rs) {
-        if (err) throw err;
-        console.log(rs);
-        console.log('OK');
-        res.redirect(301,'http://localhost:8888/chooseCharacter.html?name='+name);
+        if (err){
+            console.log('fail');
+            res.redirect(301, 'http://localhost:8888/loginFailed.html');
+        }
+        else {
+            console.log(rs);
+            console.log('OK');
+            res.redirect(301,'http://localhost:8888/chooseCharacter.html?name='+name);
+        }
         //res.sendFile(__dirname + "/" + "chooseCharacter.html" );
     })
 })

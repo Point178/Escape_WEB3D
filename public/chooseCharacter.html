@@ -15,9 +15,9 @@
         <script>
             var url = decodeURI(window.location.href);
 
-            var argsIndex = url .split("?name=");
+            var argsIndex = url.split("?name=");
             var arg = argsIndex[1];
-            document.write("<span id=\"hello\">您好！"+arg+"</span>")
+            document.write("<span id=\"hello\">您好！" + arg + "</span>")
         </script>
 
         <span id="out"><a href="/logout">登出</a></span>
@@ -25,8 +25,14 @@
 </div>
 
 <div align="center">
-<img src="image/login_background.jpeg" class="character" onclick="location='hall.html'">
-<img src="image/login_background.jpeg" class="character" onclick="location='hall.html'">
+    <script>
+        var url = decodeURI(window.location.href);
+
+        var argsIndex = url.split("?name=");
+        var arg = argsIndex[1];
+        document.write("<img src=\"image/login_background.jpeg\" class=\"character\" onclick=\"location='hall.html?name='+arg\">")
+        document.write("<img src=\"image/login_background.jpeg\" class=\"character\" onclick=\"location='hall.html?name='+arg\">")
+    </script>
 </div>
 </body>
 </html>
