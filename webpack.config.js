@@ -19,7 +19,7 @@ module.exports = {
         contentBase: "./public",
         historyApiFallback: true,
         inline: true,
-        host: '127.0.0.1',
+        host: 'localhost',
         compress: true,
         port: 8888
     },

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by apple on 2018/6/13.
  */
 var  express=require('express');
@@ -11,7 +11,7 @@ var mysql=require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '123456',
+    password : '970511',
     database : 'escape',
     port:'3306'
 });

@@ -15,6 +15,7 @@
     </script>
     <script src="register_bundle.js"></script>
 
+
 </head>
 
 <body class="signin">
@@ -22,14 +23,14 @@
     <div class="row">
         <div class="col-sm-12">
 
-            <form class="m-t" role="form" method="get" action="" onsubmit="return InputCheck(this)">
+            <form class="m-t" role="form" method="get" action="/register" onsubmit="return InputCheck(this)">
                 <h4 class="no-margins">注册：</h4>
                 <p class="m-t-md">请完成注册</p>
                 <div class="form-group">
-                    <input type="text" name="username" class="form-control" placeholder="用户名" required="">
+                    <input id="username" type="text" name="username" class="form-control" placeholder="用户名" required="">
                 </div>
                 <div class="form-group">
-                    <input type="password" name="password" class="form-control" placeholder="密码" required="">
+                    <input id="password" type="password" name="password" class="form-control" placeholder="密码" required="">
                 </div>
                 <button id="registerSubmit" type="submit" name="submit" class="btn btn-primary block full-width m-b">注 册</button>
 
