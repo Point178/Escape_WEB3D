@@ -47,15 +47,12 @@ app.get('/register',function (req,res) {
     connection.query('insert into users set ?',user,function (err,rs) {
         if (err){
             console.log('fail');
-            res.redirect(301, 'http://localhost:8888/registerFailed.html');
+            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
         }
         else {
             console.log('ok');
             res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
-            loginFailed.html
         }
-        //res.sendFile(__dirname + "/" + "chooseCharacter.html");
-        //res.send(name);
     })
 })
 
@@ -67,19 +64,17 @@ app.post('/login',function (req,res) {
 
         if (err){
             console.log('fail');
-            res.redirect(301, 'http://localhost:8888/loginFailed.html');
+            res.redirect(301, 'http://localhost:8888/login.html?state=fail');
         }
         else {
             if (rs.length==0) {
                 console.log('fail');
-                res.redirect(301, 'http://localhost:8888/loginFailed.html');
+                res.redirect(301, 'http://localhost:8888/login.html?state=fail');
             }else {
-                console.log(rs);
                 console.log('OK');
                 res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
             }
         }
-        //res.sendFile(__dirname + "/" + "chooseCharacter.html" );
     })
 })
 app.get('/logout', function (req, res) {

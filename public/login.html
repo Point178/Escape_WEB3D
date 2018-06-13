@@ -9,8 +9,9 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
     <script>
-        if (window.top !== window.self) {
-            window.top.location = window.location;
+        var url = decodeURI(window.location.href);
+        if (url.endsWith('?state=fail')){
+            alert("用户名或密码错误，请重试")
         }
     </script>
 

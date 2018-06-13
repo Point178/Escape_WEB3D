@@ -7,7 +7,9 @@ module.exports = {
     entry: {
         game: __dirname + "/app/main.js",
         register:__dirname+"/app/register.js",
-        login:__dirname+"/app/login.js"
+        login:__dirname+"/app/login.js",
+        hall:__dirname+"/app/hall.js",
+        chooseCharacter:__dirname+"/app/chooseCharacter.js"
     },
     output: {
         path: __dirname + "/public",
@@ -19,7 +21,7 @@ module.exports = {
         contentBase: "./public",
         historyApiFallback: true,
         inline: true,
-        host: 'localhost',
+        host: '127.0.0.1',
         compress: true,
         port: 8888
     },

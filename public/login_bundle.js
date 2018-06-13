@@ -77,7 +77,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "/";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -85,35 +85,6 @@
 /******/ })
 /************************************************************************/
 /******/ ({
-
-/***/ "./app/ajax.js":
-/*!*********************!*\
-  !*** ./app/ajax.js ***!
-  \*********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-$(function(){
-    $('#registerSubmit').on('click',function(){
-        var info = $('form').serialize();
-        $.ajax({
-            type:"get",
-            url:"http://127.0.0.1:8888",
-            data:info,
-            success:function(response,status,xhr){
-                alert(response);
-                localStorage.name = $('input[name="name"]').val();
-            }
-        });
-        return false;
-    });
-
-    $('#loginSubmit').on('click',function(){
-        return false;
-    });
-});
-
-/***/ }),
 
 /***/ "./app/bootstrap.min.css":
 /*!*******************************!*\
@@ -153,10 +124,8 @@ if(false) {}
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! ./bootstrap.min.css */ "./app/bootstrap.min.css");
-//require('./font-awesome.css?v=4.4.0');
 __webpack_require__(/*! ./style.css */ "./app/style.css");
-const ajax= __webpack_require__(/*! ./ajax.js */ "./app/ajax.js");
-ajax();
+
 
 /***/ }),
 
