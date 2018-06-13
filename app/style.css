@@ -2,7 +2,7 @@ html{height: 100%;}
 body.signin {
     background: #18c8f6;
     height: auto;
-    background:url("../image/login_background.jpeg") no-repeat center fixed;
+    background:url('/image/login_background.jpeg') no-repeat center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -23,6 +23,7 @@ body.signin {
 
 .signinpanel .btn {
     margin-top: 15px;
+    align-self: center;
 }
 
 .signinpanel form {
@@ -91,4 +92,8 @@ a{
     padding-bottom: 1%;
     padding-top: 1%;
     text-decoration: none;
+}
+
+.buttonDiv{
+    margin-bottom: 10px;
 }
