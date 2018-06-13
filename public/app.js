@@ -60,25 +60,31 @@ app.get('/register',function (req,res) {
 })
 
 app.post('/login',function (req,res) {
-    var name=req.query.username;
-    var pwd=req.query.password;
+    var name=req.body.username;
+    var pwd=req.body.password;
     var selectSQL = "select * from users where userName = '"+name+"' and password = '"+pwd+"'";
     connection.query(selectSQL,function (err,rs) {
+
         if (err){
             console.log('fail');
             res.redirect(301, 'http://localhost:8888/loginFailed.html');
         }
         else {
-            console.log(rs);
-            console.log('OK');
-            res.redirect(301,'http://localhost:8888/chooseCharacter.html?name='+name);
+            if (rs.length==0) {
+                console.log('fail');
+                res.redirect(301, 'http://localhost:8888/loginFailed.html');
+            }else {
+                console.log(rs);
+                console.log('OK');
+                res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
+            }
         }
         //res.sendFile(__dirname + "/" + "chooseCharacter.html" );
     })
 })
 app.get('/logout', function (req, res) {
     req.session.userName = null; // 删除session
-    res.sendFile(__dirname + "/" + "login.html" );
+    res.redirect(301, 'http://localhost:8888/login.html');
 });
 
 var server=app.listen(8888,function () {
