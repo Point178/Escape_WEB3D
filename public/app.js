@@ -50,6 +50,7 @@ app.get('/register',function (req,res) {
     connection.query('insert into users set ?',user,function (err,rs) {
         if (err) throw  err;
         console.log('ok');
+        req.session.userName = req.query.username;
         res.sendFile(__dirname + "/" + "chooseCharacter.html"  );
     })
 })
