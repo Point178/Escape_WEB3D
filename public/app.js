@@ -12,7 +12,7 @@ var bodyparser = require('body-parser');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '970511',
+    password : '123456',
     database : 'escape',
     port:'3306'
 });
@@ -61,7 +61,7 @@ app.get('/register',function (req,res) {
     })
 })
 
-app.get('/male',function (req,res){
+app.get('/chooseCharacter.html/male',function (req,res){
     var selectSQL = "update users set gender = 0 where userName = '"+req.session.userName+"'";
     connection.query(selectSQL,function (err,rs) {
         if (err){
@@ -80,7 +80,7 @@ app.get('/male',function (req,res){
     })
 
 })
-app.get('/female',function (req,res){
+app.get('/chooseCharacter.html/female',function (req,res){
     console.log(req.session.userName);
     var selectSQL = "update users set gender = 1 where userName = '"+req.session.userName+"'";
     connection.query(selectSQL,function (err,rs) {

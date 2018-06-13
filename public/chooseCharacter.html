@@ -16,8 +16,10 @@
             var url = decodeURI(window.location.href);
 
             var argsIndex = url.split("?name=");
+            if (argsIndex.length>1) {
             var arg = argsIndex[1];
             document.write("<span id=\"hello\">您好！" + arg + "</span>")
+            }
         </script>
 
         <span id="out"><a href="/logout">登出</a></span>
@@ -27,8 +29,11 @@
 <div align="center">
     <p id="characterHint" align="center">请选择角色</p>
     <script>
-        document.write("<img src=\"image/timg-2.jpeg\"  class=\"character\" onclick=\"location='/male'\" >")
-        document.write("<img src=\"image/timg-2.jpeg\" class=\"character\" onclick=\"location='/female'\">")
+        var url = decodeURI(window.location.href);
+
+        var argsIndex = url.split("?name=");
+        document.write("<img src=\"image/timg-2.jpeg\" class=\"character\" onclick=\"location='chooseCharacter.html/male?name='+argsIndex[1]\" >")
+        document.write("<img src=\"image/timg-2.jpeg\" class=\"character\" onclick=\"location='chooseCharacter.html/female?name='+argsIndex[1]\">")
     </script>
 </div>
 </body>
