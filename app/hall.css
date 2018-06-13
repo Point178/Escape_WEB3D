@@ -20,3 +20,34 @@
     background-size:cover;
     background-repeat: no-repeat;
 }
+
+#character{
+    position: absolute;
+    margin: 1%;
+    width: 20%;
+    height: 80%;
+    padding: 1%;
+}
+
+#characterImage{
+    width: 100%;
+}
+#content{
+    margin-left: 25%;
+}
+
+#buttons{
+    margin-top: 10%;
+    padding: 7%;
+}
+#characterButton{
+    width: 40%;
+    background-color: #80bdff;
+    margin-right: 1%;
+}
+
+#passwordButton{
+    width: 40%;
+    margin-left: 1%;
+    background-color: #80bdff;
+}

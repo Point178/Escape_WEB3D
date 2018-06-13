@@ -170,7 +170,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/li
 
 
 // module
-exports.push([module.i, ".character{\n    border: 0px; /*去边框*/\n    margin: 50px;\n    width: 200px;\n    height: 300px;\n}", ""]);
+exports.push([module.i, ".character{\n    border: 0px; /*去边框*/\n    margin: 50px;\n    width: 200px;\n    height: 400px;\n}\n\n#characterHint{\n    text-align: center;\n    margin-top: 5%;\n    font-size: 20px;\n}", ""]);
 
 // exports
 
