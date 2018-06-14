@@ -44,15 +44,56 @@ app.get('/register',function (req,res) {
     var  name=req.query.username;
     var  pwd=req.query.password;
     var  user={userName:name,password:pwd};
+    req.session.userName = req.query.username;
     connection.query('insert into users set ?',user,function (err,rs) {
         if (err){
             console.log('fail');
-            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+            res.redirect(301, 'http://localhost:8888/registerFailed.html');
         }
         else {
             console.log('ok');
             res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
+            app.get('/male',function (req,res){
+                var selectSQL = "update users set gender = 0 where userName = '"+name+"'";
+                connection.query(selectSQL,function (err,rs) {
+                    if (err){
+                        console.log('fail');
+                        res.redirect(301, 'http://localhost:8888/loginFailed.html');
+                    }
+                    else {
+                        if (rs.length==0) {
+                            console.log('fail');
+                            res.redirect(301, 'http://localhost:8888/loginFailed.html');
+                        }else {
+                            console.log('OK');
+                            res.redirect(301, 'http://localhost:8888/hall.html?name=' + name);
+                        }
+                    }
+                })
+
+            })
+            app.get('/female',function (req,res){
+                var selectSQL = "update users set gender = 1 where userName = '"+name+"'";
+                connection.query(selectSQL,function (err,rs) {
+                    if (err){
+                        console.log('fail');
+                        res.redirect(301, 'http://localhost:8888/loginFailed.html');
+                    }
+                    else {
+                        if (rs.length==0) {
+                            console.log('fail');
+                            res.redirect(301, 'http://localhost:8888/loginFailed.html');
+                        }else {
+                            console.log('OK');
+                            res.redirect(301, 'http://localhost:8888/hall.html?name=' + name);
+                        }
+                    }
+                })
+
+            })
         }
+        //res.sendFile(__dirname + "/" + "chooseCharacter.html");
+        //res.send(name);
     })
 })
 
@@ -64,17 +105,18 @@ app.post('/login',function (req,res) {
 
         if (err){
             console.log('fail');
-            res.redirect(301, 'http://localhost:8888/login.html?state=fail');
+            res.redirect(301, 'http://localhost:8888/loginFailed.html');
         }
         else {
             if (rs.length==0) {
                 console.log('fail');
-                res.redirect(301, 'http://localhost:8888/login.html?state=fail');
+                res.redirect(301, 'http://localhost:8888/loginFailed.html');
             }else {
                 console.log('OK');
-                res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
+                res.redirect(301, 'http://localhost:8888/hall.html?name=' + name);
             }
         }
+        //res.sendFile(__dirname + "/" + "chooseCharacter.html" );
     })
 })
 app.get('/logout', function (req, res) {
