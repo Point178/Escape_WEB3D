@@ -12,7 +12,7 @@ var bodyparser = require('body-parser');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '123456',
+    password : '970511',
     database : 'escape',
     port:'3306'
 });
@@ -53,53 +53,77 @@ app.get('/register',function (req,res) {
         else {
             console.log('ok');
             res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
-            app.get('/male',function (req,res){
-                var selectSQL = "update users set gender = 0 where userName = '"+name+"'";
-                connection.query(selectSQL,function (err,rs) {
-                    if (err){
-                        console.log('fail');
-                        res.redirect(301, 'http://localhost:8888/register.html?state=fail');
-                    }
-                    else {
-                        if (rs.length==0) {
-                            console.log('fail');
-                            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
-                        }else {
-                            console.log('OK');
-                            res.redirect(301, 'http://localhost:8888/hall.html?name=' + name);
-                        }
-                    }
-                })
 
-            })
-            app.get('/female',function (req,res){
-                var selectSQL = "update users set gender = 1 where userName = '"+name+"'";
-                connection.query(selectSQL,function (err,rs) {
-                    if (err){
-                        console.log('fail');
-                        res.redirect(301, 'http://localhost:8888/register.html?state=fail');
-                    }
-                    else {
-                        if (rs.length==0) {
-                            console.log('fail');
-                            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
-                        }else {
-                            console.log('OK');
-                            res.redirect(301, 'http://localhost:8888/hall.html?name=' + name);
-                        }
-                    }
-                })
 
-            })
         }
         //res.sendFile(__dirname + "/" + "chooseCharacter.html");
         //res.send(name);
     })
 })
 
+app.get('/male',function (req,res){
+    var selectSQL = "update users set gender = 0 where userName = '"+req.session.userName+"'";
+    connection.query(selectSQL,function (err,rs) {
+        if (err){
+            console.log('fail');
+            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+        }
+        else {
+            if (rs.length==0) {
+                console.log('fail');
+                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+            }else {
+                console.log('OK');
+                res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
+            }
+        }
+    })
+
+})
+app.get('/female',function (req,res){
+    console.log(req.session.userName);
+    var selectSQL = "update users set gender = 1 where userName = '"+req.session.userName+"'";
+    connection.query(selectSQL,function (err,rs) {
+        if (err){
+            console.log('fail');
+            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+        }
+        else {
+            if (rs.length==0) {
+                console.log('fail');
+                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+            }else {
+                console.log('OK');
+                res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
+            }
+        }
+    })
+
+})
+app.post('/password',function (req,res){
+    var newpwd = req.body.newpassword;
+    var selectSQL = "update users set password = '"+newpwd+"' where userName = '"+req.session.userName+"'";
+    connection.query(selectSQL,function (err,rs) {
+        if (err){
+            console.log('fail');
+            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+        }
+        else {
+            if (rs.length==0) {
+                console.log('fail');
+                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+            }else {
+                console.log('OK');
+                res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
+            }
+        }
+    })
+
+})
 app.post('/login',function (req,res) {
     var name=req.body.username;
     var pwd=req.body.password;
+    req.session.userName = req.body.username;
     var selectSQL = "select * from users where userName = '"+name+"' and password = '"+pwd+"'";
     connection.query(selectSQL,function (err,rs) {
 
@@ -120,7 +144,7 @@ app.post('/login',function (req,res) {
     })
 })
 app.get('/logout', function (req, res) {
-    req.session.userName = null; // 删除session
+    delete req.session.userName; // 删除session
     res.redirect(301, 'http://localhost:8888/login.html');
 });
 
