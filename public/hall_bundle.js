@@ -159,6 +159,7 @@ __webpack_require__(/*! ./style.css */ "./app/style.css");
 
 
 
+
 /***/ }),
 
 /***/ "./app/style.css":
@@ -222,7 +223,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/li
 
 
 // module
-exports.push([module.i, ".add{\n    border: 0px; /*去边框*/\n    width: 60px; /*宽*/\n    height: 60px;/*高*/\n    background-image:url(/image/add.png);/*背景图片*/\n    background-size:cover;\n    background-repeat: no-repeat;\n    color: white;\n    position:absolute;\n    right:30px;\n    bottom:30px;\n}\n\n.room{\n    border: 0px; /*去边框*/\n    margin: 20px;\n    width: 200px; /*宽*/\n    height: 160px;/*高*/\n    background-image:url(/image/login_background.jpeg);/*背景图片*/\n    background-size:cover;\n    background-repeat: no-repeat;\n}\n\n#character{\n    position: absolute;\n    margin: 1%;\n    width: 20%;\n    height: 80%;\n    padding: 1%;\n}\n\n#characterImage{\n    width: 100%;\n}\n#content{\n    margin-left: 25%;\n}\n\n#buttons{\n    margin-top: 10%;\n    padding: 7%;\n}\n#characterButton{\n    width: 40%;\n    background-color: #80bdff;\n    margin-right: 1%;\n}\n\n#passwordButton{\n    width: 40%;\n    margin-left: 1%;\n    background-color: #80bdff;\n}\n\n#showButton{\n    margin-top: 5%;\n    width: 40%;\n    background-color: #80bdff;\n}\n", ""]);
+exports.push([module.i, ".add{\n    border: 0px; /*去边框*/\n    width: 60px; /*宽*/\n    height: 60px;/*高*/\n    background-image:url(/image/add.png);/*背景图片*/\n    background-size:cover;\n    background-repeat: no-repeat;\n    color: white;\n    position:absolute;\n    right:30px;\n    bottom:30px;\n}\n\n.room{\n    width: 200px; /*宽*/\n    height: 160px;/*高*/\n    background-image:url(/image/login_background.jpeg);/*背景图片*/\n    background-size:cover;\n    background-repeat: no-repeat;\n}\n\n#character{\n    position: absolute;\n    margin: 1%;\n    width: 20%;\n    height: 80%;\n    padding: 1%;\n}\n\n#characterImage{\n    width: 100%;\n}\n#content{\n    margin-left: 25%;\n}\n\n#buttons{\n    margin-top: 10%;\n    padding: 7%;\n}\n#characterButton{\n    width: 40%;\n    background-color: #80bdff;\n    margin-right: 1%;\n}\n\n#passwordButton{\n    width: 40%;\n    margin-left: 1%;\n    background-color: #80bdff;\n}\n\n#showButton{\n    margin-top: 5%;\n    width: 40%;\n    background-color: #80bdff;\n}\n\n#div{\n    margin: 1%;\n}\n\n.roomdiv{\n    display: inline-block;\n    margin: 3%;\n}\n\n.roomInfo{\n    margin-top: 0;\n    margin-left: auto;\n    margin-right: auto;\n}\n", ""]);
 
 // exports
 

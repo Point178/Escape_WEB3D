@@ -12,8 +12,6 @@
 }
 
 .room{
-    border: 0px; /*去边框*/
-    margin: 20px;
     width: 200px; /*宽*/
     height: 160px;/*高*/
     background-image:url(/image/login_background.jpeg);/*背景图片*/
@@ -56,4 +54,19 @@
     margin-top: 5%;
     width: 40%;
     background-color: #80bdff;
+}
+
+#div{
+    margin: 1%;
+}
+
+.roomdiv{
+    display: inline-block;
+    margin: 3%;
+}
+
+.roomInfo{
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
 }

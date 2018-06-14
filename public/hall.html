@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title> 大厅</title>
     <script src="hall_bundle.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body id="body">
 <div id="topHeaderRow">
@@ -29,17 +31,42 @@
                 var argsIndex = url.split("?name=");
                 document.write("<button id=\"characterButton\" class=\"btn btn-primary block full-width m-b\" onclick=\"location='chooseCharacter.html?name='+argsIndex[1]\">修改角色</button>");
                 document.write("<button id=\"passwordButton\" class=\"btn btn-primary block full-width m-b\" onclick=\"location='password.html'\">修改密码</button>");
-                document.write("<button id=\"showButton\" class=\"btn btn-primary block full-width m-b\" onclick=\"location='hall.html/show?name='+argsIndex[1]\">显示房间</button>");
+                document.write("<button id=\"showButton\" class=\"btn btn-primary block full-width m-b\" onclick=f()>显示房间</button>");
             </script>
         </div>
     </div>
     <div id="content">
-       <!-- <SCRIPT LANGUAGE="JavaScript">
-            function reP() {
-                document.getElementById("content").innerHTML += "<button class=\"room\" id=\"room\" style='display:inline-block' width=\"160px\" hight=\"200px\" onclick=\"location='game.html'\">房间</button>";
+        <script>
+            function f() {
+                $.getJSON("json",
+                    function (msg) {
+                        var data=msg.data;
+                        for(var i = 0; i < data.length; i++) {
+                            var id = data[i].id;
+                            var number=data[i].number;
+                            var status=data[i].status;
+                            var sta;
+                            if (status==0) {
+                                sta="准备中";
+                            }
+                            else if(status==1){
+                                sta="已开始";
+                            }
+
+                            document.getElementById('div').innerHTML+="<div class='roomdiv'><button class='room' onclick=\"location='game.html'\"></button><div class='roomInfo'>"+id+"："+number+"人 "+sta+"</div></div>";
+                        }
+                    });
             }
-        </SCRIPT>
-        <button name="add" class="add" onclick="reP()"></button>-->
+
+        </script>
+        <div id="div"></div>
+
+        <!-- <SCRIPT LANGUAGE="JavaScript">
+             function reP() {
+                 document.getElementById("content").innerHTML += "<button class=\"room\" id=\"room\" style='display:inline-block' width=\"160px\" hight=\"200px\" onclick=\"location='game.html'\">房间</button>";
+             }
+         </SCRIPT>
+         <button name="add" class="add" onclick="reP()"></button>-->
 
         <button name="add" class="add" onclick="location='startRoom.html'"></button>
 
