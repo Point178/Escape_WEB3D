@@ -12,7 +12,7 @@ var bodyparser = require('body-parser');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '970511',
+    password : '123456',
     database : 'escape',
     port:'3306'
 });
@@ -99,6 +99,21 @@ app.get('/chooseCharacter.html/female',function (req,res){
                 res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
             }
         }
+    })
+
+})
+app.get('/hall.html/show',function (req,res){
+    console.log('hallok');
+
+    var selectSQL = "select id,number,status from room";
+
+    connection.query(selectSQL,function (err,rs) {
+        if (err) {
+            console.log('err');
+        }
+        console.log('hall')
+        console.log(rs);
+        res.redirect(301,'http://localhost:8888/hall.html');
     })
 
 })
