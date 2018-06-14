@@ -12,7 +12,7 @@ var bodyparser = require('body-parser');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '123456',
+    password : '970511',
     database : 'escape',
     port:'3306'
 });
@@ -39,7 +39,9 @@ app.get('/login.html',function (req,res) {
 app.get('/register.html',function (req,res) {
     res.render(__dirname + "/" + "register.html"  );
 })
-
+/*app.get('/game.html',function (req,res) {
+    res.sendFile(__dirname + "/" + "game.html" );
+})*/
 app.get('/register',function (req,res) {
     var  name=req.query.username;
     var  pwd=req.query.password;
@@ -120,6 +122,50 @@ app.post('/password',function (req,res){
     })
 
 })
+app.post('/start',function (req,res){
+    var roomid = req.body.roomid;
+    req.session.id = req.body.roomid;
+    var  room={id:roomid,number:1,user1:req.session.userName};
+    connection.query('insert into room set ?',room,function (err,rs){
+        if (err){
+            console.log('fail');
+            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+        }
+        else {
+            if (rs.length==0) {
+                console.log('fail');
+                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+            }else {
+                console.log('OK');
+                res.redirect(301, 'http://localhost:8888/game.html?name=' + roomid);
+            }
+        }
+    })
+
+})
+app.get('/game.html/add',function (req,res){
+    var sql = "select * from room where id = '"+req.session.id+"'";
+    var selectSQL2 = "update room set number = 2,user2='"+req.session.userName+"' where id = '"+req.session.id+"'";
+    var selectSQL3 = "update room set number = 3,user3='"+req.session.userName+"',status=1 where id = '"+req.session.id+"'";
+    connection.query(selectSQL,function (err,rs) {
+        if (err){
+            console.log('fail');
+            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+        }
+        else {
+            if (rs.length==0) {
+                console.log('fail');
+                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+            }else {
+                console.log('OK');
+                res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
+            }
+        }
+    })
+
+
+})
+
 app.post('/login',function (req,res) {
     var name=req.body.username;
     var pwd=req.body.password;
