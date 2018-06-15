@@ -14,7 +14,7 @@ var bodyparser = require('body-parser');
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '123456',
+    password: '970511',
     database: 'escape',
     port: '3306'
 });
@@ -57,11 +57,8 @@ app.get('/register', function (req, res) {
         else {
             console.log('ok');
             res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
-
-
         }
-        //res.sendFile(__dirname + "/" + "chooseCharacter.html");
-        //res.send(name);
+        
     })
 })
 
@@ -104,22 +101,6 @@ app.get('/chooseCharacter.html/female', function (req, res) {
     })
 
 })
-/*app.get('/hall.html/show',function (req,res){
-
-    var selectSQL = "select id,number,status from room";
-
-    connection.query(selectSQL,function (err,rs) {
-        if (err) {
-            console.log('err');
-        }
-        console.log(rs);
-        res.send(rs);
-        //res.redirect(__dirname + "/" + 'hall.html?name='+req.session.userName);
-
-    })
-    //res.redirect(301,'http://localhost:8888/hall.html');
-
-})*/
 
 app.get('/json',function(req,res,next){
     console.log('ajax');
@@ -129,13 +110,13 @@ app.get('/json',function(req,res,next){
         if (err) {
             console.log('err');
         }
-        console.log(rs);
+        //console.log(rs);
         var string=JSON.stringify(rs);
         var data = JSON.parse(string);
         var result = {
             data:data
         }
-        console.log(result);
+        //console.log(result);
         res.send(result);
     });
 });
@@ -181,28 +162,51 @@ app.post('/start', function (req, res) {
     })
 
 })
-app.get('/game.html/add', function (req, res) {
-    var sql = "select * from room where id = '" + req.session.id + "'";
-    var selectSQL2 = "update room set number = 2,user2='" + req.session.userName + "' where id = '" + req.session.id + "'";
-    var selectSQL3 = "update room set number = 3,user3='" + req.session.userName + "',status=1 where id = '" + req.session.id + "'";
-    connection.query(selectSQL, function (err, rs) {
+
+app.get('/hall.html/add', function (req, res) {
+    var url = req.url;
+    console.log('djiaf');
+    var argsIndex = url.split("?name=");
+    var id = argsIndex[1];
+    var number;
+    var sql = "select * from room where id = '"+id+"'";
+    var selectSQL2 = "update room set number = 2,user2='" + req.session.userName + "' where id = '" + id + "'";
+    var selectSQL3 = "update room set number = 3,user3='" + req.session.userName + "',status=1 where id = '" + id + "'";
+    connection.query(sql, function (err, rs) {
         if (err) {
-            console.log('fail');
-            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
-        }
-        else {
-            if (rs.length == 0) {
-                console.log('fail');
-                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
-            } else {
-                console.log('OK');
-                res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
+            console.log('err');
+        }else{
+            number = rs[0].number;
+            console.log(number);
+            switch(number){
+                case 1:
+                    connection.query(selectSQL2, function (err, rs) {
+                        if (err) {
+                            console.log('err');
+                        }else{
+                            console.log('hello8');
+                            res.redirect(301, 'http://localhost:8888/game.html?name=' + id);
+                        }
+                    })
+                    break;
+                case 2:
+                    connection.query(selectSQL3, function (err, rs) {
+                        if (err) {
+                            console.log('err');
+                        }else{
+                            console.log('hello');
+                            res.redirect(301, 'http://localhost:8888/game.html?name=' + id);
+                        }
+                    })
+                    break;
+                default:
+                    console.log('hello9');
+                    res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
             }
         }
     })
-
-
 })
+
 
 app.post('/login', function (req, res) {
     var name = req.body.username;

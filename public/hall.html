@@ -53,20 +53,13 @@
                                 sta="已开始";
                             }
 
-                            document.getElementById('div').innerHTML+="<div class='roomdiv'><button class='room' onclick=\"location='game.html'\"></button><div class='roomInfo'>"+id+"："+number+"人 "+sta+"</div></div>";
+                            document.getElementById('div').innerHTML+="<div class='roomdiv'><button class='room' onclick=\"location='hall.html/add?name="+id+"'\"></button><div class='roomInfo'>"+id+"："+number+"人 "+sta+"</div></div>";
                         }
                     });
             }
 
         </script>
         <div id="div"></div>
-
-        <!-- <SCRIPT LANGUAGE="JavaScript">
-             function reP() {
-                 document.getElementById("content").innerHTML += "<button class=\"room\" id=\"room\" style='display:inline-block' width=\"160px\" hight=\"200px\" onclick=\"location='game.html'\">房间</button>";
-             }
-         </SCRIPT>
-         <button name="add" class="add" onclick="reP()"></button>-->
 
         <button name="add" class="add" onclick="location='startRoom.html'"></button>
 
