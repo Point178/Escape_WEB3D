@@ -131,6 +131,435 @@ module.exports = function () {
       console.log("error");
       });
     });
+    //notebook
+    new THREE.MTLLoader()
+    .setPath('/image/model/notebook/')
+    .load('Lowpoly_Notebook_2.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/notebook/')
+    .setMaterials(materials)
+    .load('Lowpoly_Notebook_2.obj', function (object) {
+      object.position.y = 100;
+      object.position.z = 100;
+      object.position.x = -20;
+      object.scale.set(10, 10, 10);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    //book1
+    new THREE.MTLLoader()
+    .setPath('/image/model/book/')
+    .load('objBook.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book/')
+    .setMaterials(materials)
+    .load('objBook.obj', function (object) {
+      object.position.y = 140;
+      object.position.z = -450;
+      object.position.x = -120;
+      object.scale.set(3, 3, 3);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    //book2
+    new THREE.MTLLoader()
+    .setPath('/image/model/book1/')
+    .load('book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book1/')
+    .setMaterials(materials)
+    .load('book.obj', function (object) {
+      object.position.y = 160;
+      object.position.z = -450;
+      object.position.x = -170;
+      object.scale.set(10, 20, 10);
+      scene.add(object);
+      // object.position.x=-190;
+      // scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+
+
+//book3
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = 0;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = -160;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = -150;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = -140;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = -250;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x =-240;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x =-230;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x =-220;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x =-260;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x =-210;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x =-200;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x =-190;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = 10;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = 20;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = 30;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = 40;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = 50;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+    new THREE.MTLLoader()
+    .setPath('/image/model/book3/')
+    .load('Sample_Book.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/book3/')
+    .setMaterials(materials)
+    .load('Sample_Book.obj', function (object) {
+      object.position.y = 135;
+      object.position.z = -450;
+      object.position.x = 60;
+      object.scale.set(2, 3, 2);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
         //door
     new THREE.MTLLoader()
     .setPath('/image/model/door/')
