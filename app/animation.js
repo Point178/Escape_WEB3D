@@ -1,8 +1,8 @@
 /**
  * Created by 昕点陈 on 2018/6/9.
  */
-/*
- Created by 何当当 on 2018/6/
+/**
+ Created by 何当当 on 2018/6/13
  */
 
 module.exports = function () {
@@ -111,6 +111,74 @@ module.exports = function () {
         frontWall.rotation.x = Math.PI / 180 * 90;
         frontWall.position.set(0, 500, 600);
         scene.add(frontWall);
+        //table
+    new THREE.MTLLoader()
+    .setPath('/image/model/table/')
+    .load('table.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/table/')
+    .setMaterials(materials)
+    .load('table.obj', function (object) {
+      object.position.y = 20;
+      object.position.z = 200;
+      object.position.x = 0;
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+        //door
+    new THREE.MTLLoader()
+    .setPath('/image/model/door/')
+    .load('door.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/door/')
+    .setMaterials(materials)
+    .load('door.obj', function (object) {
+      object.position.y = -80;
+      object.position.z = 990;
+      object.position.x = 0;
+      object.rotation.y=Math.PI / 180 * 90;
+      object.scale.set(50, 80, 60);
+
+      // object.rotate.y=Math.PI / 180 * 90;
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+
+        //shoestore
+    new THREE.MTLLoader()
+    .setPath('/image/model/shoestore/')
+    .load('small.mtl', function (materials) {
+    materials.preload();
+    new THREE.OBJLoader()
+    .setPath('/image/model/shoestore/')
+    .setMaterials(materials)
+    .load('small.obj', function (object) {
+      object.position.y = 50;
+      object.position.z = -350;
+      object.position.x = 0;
+
+      object.scale.set(220, 100, 100);
+      scene.add(object);
+      },
+      function () {
+      console.log("success");
+      }, function () {
+      console.log("error");
+      });
+    });
+
 
         // bookstore
         new THREE.MTLLoader()
@@ -324,18 +392,7 @@ module.exports = function () {
         document.body.appendChild(stats.dom);
     }
 
-    //var controls;
-    /*function initControls() {
-     controls = new THREE.FirstPersonControls(camera);
-     controls.lookSpeed = 0.2; //鼠标移动查看的速度
-     controls.movementSpeed = 20; //相机移动速度
-     controls.noFly = true;
-     controls.constrainVertical = true; //约束垂直
-     controls.verticalMin = 1.0;
-     controls.verticalMax = 2.0;
-     controls.lon = -100; //进入初始视角x轴的角度
-     controls.lat = 0; //初始视角进入后y轴的角度
-     }*/
+
 
     function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -343,110 +400,7 @@ module.exports = function () {
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    /*function initModel() {
-     var path = "/image/RiverSide/";
-     var format = '.BMP';
-     var urls = [
-     path + 'px' + format, path + 'nx' + format,
-     path + 'py' + format, path + 'ny' + format,
-     path + 'pz' + format, path + 'nz' + format
-     ];
 
-     var reflectionCube = new THREE.CubeTextureLoader().load(urls);
-     reflectionCube.format = THREE.RGBFormat;
-     var refractionCube = new THREE.CubeTextureLoader().load(urls);
-     refractionCube.mapping = THREE.CubeRefractionMapping;
-     refractionCube.format = THREE.RGBFormat;
-
-     scene.background = reflectionCube;
-
-     // room
-     new THREE.MTLLoader()
-     .setPath('/image/model/bedroom/')
-     .load('Bedroom.mtl', function (materials) {
-     materials.preload();
-     new THREE.OBJLoader()
-     .setPath('/image/model/bedroom/')
-     .setMaterials(materials)
-     .load('Bedroom.obj', function (object) {
-     //object.position.y = 0;
-     //object.position.z = 0;
-     //object.position.x = 0;
-     object.scale.set(8, 8, 8);
-     scene.add(object);
-     },
-     function () {
-     console.log("success");
-     }, function () {
-     console.log("error");
-     });
-     });
-
-     //light
-     new THREE.MTLLoader()
-     .setPath('/image/model/bedroom/')
-     .load('light.mtl', function (materials) {
-     materials.preload();
-     new THREE.OBJLoader()
-     .setPath('/image/model/bedroom/')
-     .setMaterials(materials)
-     .load('light.obj', function (object) {
-     //object.position.y = 0;
-     object.position.z = 40;
-     //object.position.x = 0;
-     //object.scale.set(5,5,5);
-     scene.add(object);
-     },
-     function () {
-     console.log("success");
-     }, function () {
-     console.log("error");
-     });
-     });
-
-     //bed
-     new THREE.MTLLoader()
-     .setPath('/image/model/bedroom/')
-     .load('bed.mtl', function (materials) {
-     materials.preload();
-     new THREE.OBJLoader()
-     .setPath('/image/model/bedroom/')
-     .setMaterials(materials)
-     .load('bed.obj', function (object) {
-     object.position.y = 20;
-     //object.position.z = 0;
-     object.position.x = 30;
-     object.scale.set(1.5, 1.2, 1.2);
-     scene.add(object);
-     },
-     function () {
-     console.log("success");
-     }, function () {
-     console.log("error");
-     });
-     });
-
-     //desk
-     new THREE.MTLLoader()
-     .setPath('/image/model/bedroom/')
-     .load('desk.mtl', function (materials) {
-     materials.preload();
-     new THREE.OBJLoader()
-     .setPath('/image/model/bedroom/')
-     .setMaterials(materials)
-     .load('desk.obj', function (object) {
-     object.position.y = 20;
-     object.position.z = -10;
-     object.position.x = 20;
-     // object.scale.set(,1.5,1.5);
-     scene.add(object);
-     },
-     function () {
-     console.log("success");
-     }, function () {
-     console.log("error");
-     });
-     });*/
 
     document.body.addEventListener('keydown', function (e) {
         switch (e.keyCode) {
@@ -458,7 +412,7 @@ module.exports = function () {
 
             case 37: // left arrow
             case 65: // A
-                user.rSpeed = 0.15;
+                user.rSpeed = 0.1;
                 user.speed = 1;
                 break;
 
@@ -470,7 +424,7 @@ module.exports = function () {
 
             case 68: // D
             case 39: // right arrow
-                user.rSpeed = -0.15;
+                user.rSpeed = -0.1;
                 user.speed = 1;
                 break;
 
@@ -516,15 +470,13 @@ module.exports = function () {
         initGui();
         initScene();
         initCamera();
-        //initLight();
+
         addSceneElement();
-        //initControls();
+
         initStats();
         initRender();
-
-        //animate();
         window.onresize = onWindowResize;
-        //window.addEventListener('resize', onWindowResize, false);
+
     }
 
     function start() {
