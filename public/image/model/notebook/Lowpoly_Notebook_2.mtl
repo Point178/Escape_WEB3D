@@ -10,9 +10,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd F:\Privat\001_Cgtrader\Lowpoly_Notebook\textures\Lowpolay_Laptop_col.JPG
-map_Bump  F:\\Privat\\001_Cgtrader\\Lowpoly_Notebook\\textures\\Lowpolay_Laptop_nor.JPG
-refl  F:\\Privat\\001_Cgtrader\\Lowpoly_Notebook\\textures\\Ref.jpg
+map_Kd Lowpoly_Laptop_Nor_1.jpg
+map_Bump  Lowpoly_Laptop_Nor_1.jpg
+refl  textures\\Ref.jpg
 
 newmtl Lowpoly_Screen
 Ns 96.078431
@@ -23,6 +23,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd F:\Privat\001_Cgtrader\Lowpoly_Notebook\textures\Lowpolay_Laptop_nor_2.JPG
-map_Bump  F:\\Privat\\001_Cgtrader\\Lowpoly_Notebook\\textures\\Lowpolay_Laptop_nor_2.JPG
-refl  F:\\Privat\\001_Cgtrader\\Lowpoly_Notebook\\textures\\Ref.jpg
+map_Kd Lowpoly_Laptop_Nor_2.jpg
+map_Bump  Lowpoly_Laptop_Nor_2.jpg
+refl  textures\\Ref.jpg

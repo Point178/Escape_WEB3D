@@ -5,7 +5,6 @@ function User(params) {
     var self = this;
     var user;
     var mtlLoader = new THREE.MTLLoader();
-    var camera = params.scene.camera;
 
     this.speed = 0;
     this.rSpeed = 0;
@@ -25,11 +24,11 @@ function User(params) {
                     user = object;
                     user.position.y = 10;
                     user.position.x = 0;
-                    user.position.z = 0;
+                    user.position.z = 200;
                     params.scene.add(user);
                     self.user = user;
+                    user.parent = params.camera;
                     params.cb();
-                    //object.scale.set(0.5, 0.5, 0.5);
                 },
                 function () {
                     console.log("success");

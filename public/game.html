@@ -9,13 +9,17 @@
 <script src="./js/loaders/MTLLoader.js"></script>
 <script src="./js/loaders/OBJLoader.js"></script>
 <script src="./js/Detector.js"></script>
-<script src="./js/libs/stats.min.js"></script>
-<script src="./js/controls/FirstPersonControls.js"></script>
-<!--<script src="./js/controls/OrbitControls.js"></script>-->
 <script src="./js/libs/dat.gui.min.js"></script>
+<script src="./js/controls/PointerLockControls.js"></script>
 
 <body>
-<div id="world"></div>
+<div id="world">
+    <div id="instructions">
+        <span style="font-size:40px">Click to play</span>
+        <br />
+        (W, A, S, D = Move, F = Pick up object, MOUSE = Look around)
+    </div>
+</div>
 <script src="game_bundle.js"></script>
 </body>
 </html>
