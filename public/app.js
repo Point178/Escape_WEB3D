@@ -1,13 +1,16 @@
 ﻿/**
  * Created by apple on 2018/6/13.
  */
+
 var express = require('express');
 var app = express();
-var http = require('http')
+var http = require('http');
+//var io = require('socket.io').listen(app);
 
 var mysql = require('mysql');
 var session = require('express-session');
 var bodyparser = require('body-parser');
+//socket = io.connect('http://localhost:8888');
 /**
  * 配置MySql
  */
@@ -169,6 +172,7 @@ app.get('/hall.html/add', function (req, res) {
     var argsIndex = url.split("?name=");
     var id = argsIndex[1];
     var number;
+    req.session.id=id;
     var sql = "select * from room where id = '"+id+"'";
     var selectSQL2 = "update room set number = 2,user2='" + req.session.userName + "' where id = '" + id + "'";
     var selectSQL3 = "update room set number = 3,user3='" + req.session.userName + "',status=1 where id = '" + id + "'";
@@ -202,6 +206,7 @@ app.get('/hall.html/add', function (req, res) {
                 default:
                     console.log('hello9');
                     res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
+                    break;
             }
         }
     })
@@ -232,10 +237,69 @@ app.post('/login', function (req, res) {
     })
 })
 app.get('/logout', function (req, res) {
+    var sql = "select * from room where id = '"+req.session.id+"'";
+    var sql1= "delete from room where user1='"+req.session.username+"'";
+    var sql2 = "update room set user2= null where id = '" + req.session.id + "'";
+    var sql3 = "update room set user3= null where id = '" + req.session.id + "'";
+    var user;
+    var user2;
+    var user3;
+    connection.query(sql, function (err, rs) {
+        if (err) {
+            console.log('err');
+        }else{
+            user = rs[0].user1;
+            user2 = rs[0].user2;
+            user3 = rs[0].user3;
+            switch (req.session.username){
+                case user:
+                    connection.query(sql1, function (err, rs) {
+                        if (err) {
+                            console.log('err');
+                        }else{
+                            res.redirect(301, 'http://localhost:8888/login.html');
+                        }
+                    })
+                break;
+                case user2:
+                    connection.query(sql2, function (err, rs) {
+                        if (err) {
+                            console.log('err');
+                        }else{
+                            res.redirect(301, 'http://localhost:8888/login.html');
+                        }
+                    })
+                break;
+                case user3:
+                    connection.query(sql3, function (err, rs) {
+                        if (err) {
+                            console.log('err');
+                        }else{
+                            res.redirect(301, 'http://localhost:8888/login.html');
+                        }
+                    })
+                break;
+            }
+
+        }
+    })
+    delete req.session.id;
     delete req.session.userName; // 删除session
     res.redirect(301, 'http://localhost:8888/login.html');
 });
 
+//var count = 0;
+
+/*io.on('connection', function (socket) {
+    count++;
+    socket.emit('users', {number:count});
+    socket.broadcast.emit('users', { number: count });
+    socket.on('disconnect',function(){
+        count--;
+        console.log('User disconnected');
+        socket.broadcast.emit('users',{number:count});
+    });
+});*/
 var server = http.createServer(app).listen(8888, function () {
     console.log("start");
 })
