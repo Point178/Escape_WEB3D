@@ -153,7 +153,11 @@ app.post('/start', function (req, res) {
                 res.redirect(301, 'http://localhost:8888/startroom.html?state=fail');
             } else {
                 console.log('OK');
-                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + roomid);
+                const io = require('socket.io-client');
+                var socket = io('http://127.0.0.1:3000');
+                var data={room:roomid};
+                socket.emit('room',data);
+                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + roomid+'&user='+req.session.userName);
             }
         }
     })
@@ -183,7 +187,7 @@ app.get('/hall.html/add', function (req, res) {
                             console.log('err');
                         }else{
                             console.log('hello8');
-                            res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id);
+                            res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id+'&user='+req.session.userName);
                         }
                     })
                     break;
@@ -193,7 +197,7 @@ app.get('/hall.html/add', function (req, res) {
                             console.log('err');
                         }else{
                             console.log('hello');
-                            res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id);
+                            res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id+'&user='+req.session.userName);
                         }
                     })
                     break;

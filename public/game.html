@@ -3,6 +3,34 @@
 <head>
     <meta charset="utf-8">
     <title>Escape</title>
+    <script>
+        var url = decodeURI(window.location.href);
+
+        var argsIndex = url.split("?name=");
+        var arg = argsIndex[1];
+        var argsIndex = arg.split("&user=");
+        var roomName=argsIndex[0];
+        var userName=argsIndex[1];
+        const io = require('socket.io-client');
+        var socket = io('http://127.0.0.1:3000');
+        var joinData={
+            room:roomName,
+            user:userName
+        };
+        socket.emit('join',joinData);
+        alert("发送消息");
+        //socket.emit(roomName);
+        var data={msg:"this is a message."};
+        socket.emit('sendMsg', data);
+
+        socket.on('system',(data)=>{
+            alert(data);
+        })
+        //var count = document.getElementById('root');
+        socket.on('receiveMsg', (data) => {
+
+        })
+    </script>
 </head>
 <script src="./build/three.js"></script>
 <script src="./js/loaders/DDSLoader.js"></script>
@@ -20,6 +48,7 @@
         (W, A, S, D = Move, F = Pick up object, MOUSE = Look around)
     </div>
 </div>
+
 <script src="game_bundle.js"></script>
 </body>
 </html>
