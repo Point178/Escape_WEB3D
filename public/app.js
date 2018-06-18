@@ -153,7 +153,7 @@ app.post('/start', function (req, res) {
                 res.redirect(301, 'http://localhost:8888/startroom.html?state=fail');
             } else {
                 console.log('OK');
-                res.redirect(301, 'http://localhost:8888/game.html?name=' + roomid);
+                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + roomid);
             }
         }
     })
@@ -183,7 +183,7 @@ app.get('/hall.html/add', function (req, res) {
                             console.log('err');
                         }else{
                             console.log('hello8');
-                            res.redirect(301, 'http://localhost:8888/game.html?name=' + id);
+                            res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id);
                         }
                     })
                     break;
@@ -193,7 +193,7 @@ app.get('/hall.html/add', function (req, res) {
                             console.log('err');
                         }else{
                             console.log('hello');
-                            res.redirect(301, 'http://localhost:8888/game.html?name=' + id);
+                            res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id);
                         }
                     })
                     break;
