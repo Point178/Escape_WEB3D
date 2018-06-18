@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="keywords" content="">
     <meta name="description" content="">
+    <script>
+        var url = decodeURI(window.location.href);
+        if (url.endsWith('?state=fail')) {
+            alert("房间已存在，请重试");
+            location = 'startroom.html';
+        }
+    </script>
 
 </head>
 <body class="signin">

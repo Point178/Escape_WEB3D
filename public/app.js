@@ -17,7 +17,7 @@ var bodyparser = require('body-parser');
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '970511',
+    password: '123456',
     database: 'escape',
     port: '3306'
 });
@@ -70,12 +70,10 @@ app.get('/chooseCharacter.html/male', function (req, res) {
     connection.query(selectSQL, function (err, rs) {
         if (err) {
             console.log('fail');
-            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
         }
         else {
             if (rs.length == 0) {
                 console.log('fail');
-                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
             } else {
                 console.log('OK');
                 res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
@@ -90,12 +88,10 @@ app.get('/chooseCharacter.html/female', function (req, res) {
     connection.query(selectSQL, function (err, rs) {
         if (err) {
             console.log('fail');
-            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
         }
         else {
             if (rs.length == 0) {
                 console.log('fail');
-                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
             } else {
                 console.log('OK');
                 res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
@@ -130,12 +126,10 @@ app.post('/password', function (req, res) {
     connection.query(selectSQL, function (err, rs) {
         if (err) {
             console.log('fail');
-            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
         }
         else {
             if (rs.length == 0) {
                 console.log('fail');
-                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
             } else {
                 console.log('OK');
                 res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
@@ -151,12 +145,12 @@ app.post('/start', function (req, res) {
     connection.query('insert into room set ?', room, function (err, rs) {
         if (err) {
             console.log('fail');
-            res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+            res.redirect(301, 'http://localhost:8888/startroom.html?state=fail');
         }
         else {
             if (rs.length == 0) {
                 console.log('fail');
-                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+                res.redirect(301, 'http://localhost:8888/startroom.html?state=fail');
             } else {
                 console.log('OK');
                 res.redirect(301, 'http://localhost:8888/game.html?name=' + roomid);
@@ -295,7 +289,7 @@ app.get('/logout', function (req, res) {
     socket.emit('users', {number:count});
     socket.broadcast.emit('users', { number: count });
     socket.on('disconnect',function(){
-        count--;
+        count--;n 
         console.log('User disconnected');
         socket.broadcast.emit('users',{number:count});
     });
