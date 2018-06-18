@@ -8,27 +8,13 @@
 module.exports = function () {
     var User = require("./user");
     var Basement = require("./room/basement");
-    var user, controls, scene, renderer, camera, basement;
+    var user,scene, renderer, camera, basement;
     var container = document.getElementById('world');
     var instructions = document.getElementById('instructions');
     var objects = [];
-
-    var ray = [];
-    ray.push(new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, 0, 1), 10, 1000));
-    ray.push(new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, 0, -1), 10, 1000));
-    ray.push(new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(1, 0, 0), 10, 1000));
-    ray.push(new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(-1, 0, 0), 10, 1000));
-
     var controlsEnabled = false;
-    var moveForward = false;
-    var moveBackward = false;
-    var moveLeft = false;
-    var moveRight = false;
-
-    var prevTime = performance.now();
-    var velocity = new THREE.Vector3();
-    var direction = new THREE.Vector3();
-    var vertex = new THREE.Vector3();
+    var pitchObject;
+    var yawObject;
 
     function initScene() {
         scene = new THREE.Scene();
@@ -44,11 +30,14 @@ module.exports = function () {
 
     function initCamera() {
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 5000);
-        camera.position.set(0, 160, 200);
-        camera.rotation.y = Math.PI;
-        controls = new THREE.PointerLockControls(camera);
-        scene.add(controls.getObject());
-        //camera.lookAt(0,0,0);
+        pitchObject = new THREE.Object3D();
+        pitchObject.add(camera);
+
+        yawObject = new THREE.Object3D();
+        yawObject.add(pitchObject);
+        yawObject.rotation.y = Math.PI;
+        yawObject.position.set(0, 200, 300);
+        scene.add(yawObject);
     }
 
     function onWindowResize() {
@@ -61,30 +50,24 @@ module.exports = function () {
         switch (e.keyCode) {
             case 38: // up arrow
             case 87: // W
-                //user.walk = true;
-                //user.speed = 10;
-                moveForward = true;
+                user.speed = 10;
                 break;
 
             case 37: // left arrow
             case 65: // A
-                //user.rSpeed = 0.1;
-                //user.speed = 1;
-                moveLeft = true;
+                user.flag = 1;
+                user.speed = 10;
                 break;
 
             case 83: // S
             case 40: // down arrow
-                //user.speed = -10;
-                //user.walk = true;
-                moveBackward = true;
+                user.speed = -10;
                 break;
 
             case 68: // D
             case 39: // right arrow
-                //user.rSpeed = -0.1;
-                //user.speed = 1;
-                moveRight = true;
+                user.flag = -1;
+                user.speed = 10;
                 break;
         }
     });
@@ -93,29 +76,31 @@ module.exports = function () {
         switch (e.keyCode) {
             case 38:
             case 87: // w
-                //user.walk = false;
-                //user.speed = 0;
-                moveForward = false;
+                user.speed = 0;
                 break;
             case 37:
             case 65: // a
-                //user.rSpeed = 0;
-                //user.speed = 0;
-                moveLeft = false;
+                user.flag = 0;
+                user.speed = 0;
                 break;
             case 68: // d
             case 39:
-                //user.rSpeed = 0;
-                //user.speed = 0;
-                moveRight = false;
+                user.flag = 0;
+                user.speed = 0;
                 break;
             case 83:
             case 40:
-                //user.walk = false;
-                //user.speed = 0;
-                moveBackward = false;
+                user.speed = 0;
                 break;
         }
+    });
+
+    document.body.addEventListener('mousemove', function (event) {
+        var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+        var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+        yawObject.rotation.y -= movementX * 0.002;
+        pitchObject.rotation.x -= movementY * 0.002;
+        pitchObject.rotation.x = Math.max(-1 * Math.PI / 2, Math.min(Math.PI / 2, pitchObject.rotation.x));
     });
 
     function draw() {
@@ -133,46 +118,19 @@ module.exports = function () {
     }
 
     function animate() {
-        //user.tick(camera);
-        requestAnimationFrame(animate);
-        var intersections;
-        var isCollision = false;
         if (controlsEnabled === true) {
-            for(var i = 0; i < 4; i++){
-                ray[i].ray.origin.copy(controls.getObject().position);
-                intersections = ray[i].intersectObjects(objects, true);
-                //if((intersections.length > 0 && intersections[0].distance < 50)){
-                    //console.log(intersections[0].distance + "  length  " + i);
-                //}
-                isCollision = isCollision && (intersections.length > 0 && intersections[0].distance < 50);
-            }
-
-            //var onObject = (intersections.length > 0 && intersections[0].distance > 40);
-            var time = performance.now();
-            var delta = ( time - prevTime ) / 1000;
-            velocity.x = 0;
-            velocity.z = 0;
-            velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-            direction.z = Number(moveForward) - Number(moveBackward);
-            direction.x = Number(moveLeft) - Number(moveRight);
-            direction.normalize(); // this ensures consistent movements in all directions
-            if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta;
-            if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta;
-            if (isCollision) {
-                //velocity.y = Math.max(0, velocity.y);
-                velocity.x = 0;
-                velocity.z = 0;
-            }
-            controls.getObject().translateX(velocity.x * delta);
-            controls.getObject().translateY(velocity.y * delta);
-            controls.getObject().translateZ(velocity.z * delta);
-            if (controls.getObject().position.y < 10) {
-                velocity.y = 0;
-                controls.getObject().position.y = 10;
-            }
-            prevTime = time;
+            user.tick(pitchObject, yawObject, objects);
+            renderer.render(scene, camera);
         }
-        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+    }
+
+    function load() {
+        user = new User({
+            scene: scene,
+            camera: camera,
+            cb: start
+        });
     }
 
     window.onload = function () {
@@ -182,9 +140,9 @@ module.exports = function () {
             var pointerlockchange = function (event) {
                 if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
                     controlsEnabled = true;
-                    controls.enabled = true;
+                    //controls.enabled = true;
                 } else {
-                    controls.enabled = false;
+                    //controls.enabled = false;
                     instructions.style.display = '';
                 }
             };
@@ -214,13 +172,8 @@ module.exports = function () {
         draw();
         basement = new Basement({
             scene: scene,
-            objects : objects
+            objects: objects,
+            cb: load
         });
-
-        user = new User({
-            scene: scene,
-            camera:camera,
-            cb: start
-        });
-    }
-};
+    };
+}

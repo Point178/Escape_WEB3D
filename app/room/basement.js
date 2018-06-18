@@ -821,6 +821,7 @@ function Basement(params) {
                     function () {
                         console.log("add painting");
                         console.log("success");
+                        params.cb();
                     }, function () {
                         console.log("error");
                     });

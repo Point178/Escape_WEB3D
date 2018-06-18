@@ -7,10 +7,8 @@ function User(params) {
     var mtlLoader = new THREE.MTLLoader();
 
     this.speed = 0;
-    this.rSpeed = 0;
-    this.walk = false;
-
-    this.realRotation = 0; // 真实的旋转
+    this.flag = 0;
+    
     this.dirRotation = 0; // 方向上的旋转
 
     // user
@@ -24,26 +22,27 @@ function User(params) {
                     user = object;
                     user.position.y = 10;
                     user.position.x = 0;
-                    user.position.z = 200;
+                    user.position.z = 300;
                     params.scene.add(user);
                     self.user = user;
-                    user.parent = params.camera;
-                    params.cb();
+                    //user.parent = params.camera;
                 },
                 function () {
                     console.log("success");
+                    params.cb();
                 }, function () {
                     console.log("error");
                 });
     });
 }
 
-User.prototype.tick = function (camera) {
+User.prototype.tick = function (pitchObject, yawObject, objects) {
     if (this.speed === 0) {
         return;
     }
-    this.dirRotation += this.rSpeed;
-    this.realRotation += this.rSpeed;
+
+    this.user.rotation.y = yawObject.rotation.y - Math.PI;
+    this.dirRotation = yawObject.rotation.y - Math.PI + (Math.PI / 2) * this.flag;
 
     var rotation = this.dirRotation;
 
@@ -52,14 +51,29 @@ User.prototype.tick = function (camera) {
 
     var tempX = this.user.position.x + speedX;
     var tempZ = this.user.position.z + speedZ;
-
-    this.user.rotation.y = this.realRotation;
+    
+    //collision
+    var intersections;
+    for (var i = 0; i < Math.PI * 2; i += Math.PI / 2) {
+        var y = 10;
+        console.log("start check");
+        for (; y < yawObject.position.y; y += 30) {
+            var center = new THREE.Vector3(tempX, y, tempZ);
+            var directory = new THREE.Vector3(Math.cos(i), 0, Math.sin(i));
+            var ray = new THREE.Raycaster(center, directory, 0, 1000);
+            intersections = ray.intersectObjects(objects, true);
+            if (intersections.length > 0 && intersections[0].distance < 50) {
+                console.log("collision");
+                return;
+            }
+        }
+    }
+    
     this.user.position.z += speedZ;
     this.user.position.x += speedX;
-    
-    camera.rotation.y = rotation + Math.PI;
-    camera.position.x = this.user.position.x - Math.sin(rotation) * 70;
-    camera.position.z = this.user.position.z - Math.cos(rotation) * 70;
+
+    yawObject.position.x = this.user.position.x;
+    yawObject.position.z = this.user.position.z;
 };
 
 module.exports = User;
