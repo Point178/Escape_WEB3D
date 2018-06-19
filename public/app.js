@@ -44,9 +44,7 @@ app.get('/login.html', function (req, res) {
 app.get('/register.html', function (req, res) {
     res.render(__dirname + "/" + "register.html");
 })
-/*app.get('/game.html',function (req,res) {
-    res.sendFile(__dirname + "/" + "game.html" );
-})*/
+
 app.get('/register', function (req, res) {
     var name = req.query.username;
     var pwd = req.query.password;
@@ -109,13 +107,11 @@ app.get('/json', function (req, res, next) {
         if (err) {
             console.log('err');
         }
-        //console.log(rs);
         var string = JSON.stringify(rs);
         var data = JSON.parse(string);
         var result = {
             data: data
         }
-        //console.log(result);
         res.send(result);
     });
 });

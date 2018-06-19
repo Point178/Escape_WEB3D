@@ -2,9 +2,7 @@
 const app = express();
 
 var server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
-    fs = require('fs');
-
+    io = require('socket.io').listen(server)
 
 var mysql = require('mysql');
 var con = mysql.createConnection({
@@ -27,7 +25,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('join', (data) => {
         console.log("a new player");
         socket.join(data.room);
-        io.sockets.in(data.room).emit('system',data.user,data.gender+'加入了房间');
+        io.sockets.in(data.room).emit('system',data.user+'（性别：'+data.gender+'）加入了房间');
         var user;
         var user2;
         var user3;
@@ -54,7 +52,6 @@ io.sockets.on('connection', function (socket) {
                                     console.log('err');
                                 }else{
                                     socket.leave(data.room);
-                                    //res.redirect(301, 'http://localhost:8888/login.html');
                                 }
                             })
                             break;
@@ -64,7 +61,6 @@ io.sockets.on('connection', function (socket) {
                                     console.log('err');
                                 }else{
                                     socket.leave(data.room);
-                                    //res.redirect(301, 'http://localhost:8888/login.html');
                                     }
                             })
                             break;
@@ -74,7 +70,6 @@ io.sockets.on('connection', function (socket) {
                                     console.log('err');
                                 }else{
                                     socket.leave(data.room);
-                                    //res.redirect(301, 'http://localhost:8888/login.html');
                                 }
                             })
                             break;
