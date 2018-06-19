@@ -9,6 +9,7 @@ module.exports = function() {
     var argsIndex = arg.split("&user=");
     var roomName=argsIndex[0];
     var userName=argsIndex[1];
+    //alert(userName);
     const io = require('socket.io-client');
     var socket = io('http://127.0.0.1:3000');
     var joinData={
@@ -16,6 +17,7 @@ module.exports = function() {
         user:userName
     };
     socket.emit('join',joinData);
+    //alert("发送消息");
     //socket.emit(roomName);
     var data={msg:"this is a message."};
     socket.emit('sendMsg', data);

@@ -18,7 +18,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('join', (data) => {
         console.log("a new player");
         socket.join(data.room);
-        socketio.sockets.in(data.room).emit('system','hello,'+data.name+'加入了房间');//包括自己
+        io.sockets.in(data.room).emit('system',data.user+'加入了房间');//包括自己
     });
 });
 
