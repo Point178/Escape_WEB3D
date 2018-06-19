@@ -103,7 +103,7 @@ app.get('/chooseCharacter.html/female', function (req, res) {
 
 app.get('/json', function (req, res, next) {
     console.log('ajax');
-    var selectSQL = "select id,number,status from room";
+    var selectSQL = "select id,num,status from room";
 
     connection.query(selectSQL, function (err, rs) {
         if (err) {
@@ -141,7 +141,7 @@ app.post('/password', function (req, res) {
 app.post('/start', function (req, res) {
     var roomid = req.body.roomid;
     req.session.id = req.body.roomid;
-    var room = {id: roomid, number: 1, user1: req.session.userName};
+    var room = {id: roomid, num: 1, user1: req.session.userName};
     connection.query('insert into room set ?', room, function (err, rs) {
         if (err) {
             console.log('fail');
@@ -172,8 +172,6 @@ app.get('/hall.html/add', function (req, res) {
     var number;
     req.session.id = id;
     var sql = "select * from room where id = '" + id + "'";
-    //var selectSQL2 = "update room set number = 2,user2='" + req.session.userName + "' where id = '" + id + "'";
-    //var selectSQL3 = "update room set number = 3,user3='" + req.session.userName + "' where id = '" + id + "'";
     var querySQL1 = "select * from room where user1 is null and id ='"+id+"'";
     var querySQL2 = "select * from room where user2 is null and id ='"+id+"'";
 
@@ -182,11 +180,11 @@ app.get('/hall.html/add', function (req, res) {
         if (err) {
             console.log('err');
         } else {
-            number = rs[0].number;
+            number = rs[0].num;
             var newNumber = number + 1;
-            var updateSQL1 = "update room set number = '" + newNumber + "',user1='" + req.session.userName + "' where id = '" + id + "'";
-            var updateSQL2 = "update room set number = '" + newNumber + "',user2='" + req.session.userName + "' where id = '" + id + "'";
-            var updateSQL3 = "update room set number = '" + newNumber + "',user3='" + req.session.userName + "' where id = '" + id + "'";
+            var updateSQL1 = "update room set num = '" + newNumber + "',user1='" + req.session.userName + "' where id = '" + id + "'";
+            var updateSQL2 = "update room set num = '" + newNumber + "',user2='" + req.session.userName + "' where id = '" + id + "'";
+            var updateSQL3 = "update room set num = '" + newNumber + "',user3='" + req.session.userName + "' where id = '" + id + "'";
             var updateSQL="update room set status=1 where id ='"+id+"'";
 
 

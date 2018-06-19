@@ -31,10 +31,12 @@ io.sockets.on('connection', function (socket) {
         var user;
         var user2;
         var user3;
+        var number;
         var sql = "select * from room where id = '"+data.room+"'";
-        var sql1 = "update room set user1= null, number=number-1 where id = '" + data.room + "'";
-        var sql2 = "update room set user2= null, number=number-1 where id = '" + data.room + "'";
-        var sql3 = "update room set user3= null, number=number-1 where id = '" + data.room + "'";
+        var sql1 = "update room set user1= null, num=num-1 where id = '" + data.room + "'";
+        var sql2 = "update room set user2= null, num=num-1 where id = '" + data.room + "'";
+        var sql3 = "update room set user3= null, num=num-1 where id = '" + data.room + "'";
+        var deleteSQl="delete from room where id = '"+data.room+"'";
 
         socket.on('disconnect', function() {
             con.query(sql, function (err, rs) {
@@ -44,9 +46,10 @@ io.sockets.on('connection', function (socket) {
                     user = rs[0].user1;
                     user2 = rs[0].user2;
                     user3 = rs[0].user3;
+                    number=rs[0].num;
                     switch (data.user){
                         case user:
-                            con.query(sql1, function (err, rs) {
+                            con.query(sql1, function (err) {
                                 if (err) {
                                     console.log('err');
                                 }else{
@@ -56,7 +59,7 @@ io.sockets.on('connection', function (socket) {
                             })
                             break;
                         case user2:
-                            con.query(sql2, function (err, rs) {
+                            con.query(sql2, function (err) {
                                 if (err) {
                                     console.log('err');
                                 }else{
@@ -66,7 +69,7 @@ io.sockets.on('connection', function (socket) {
                             })
                             break;
                         case user3:
-                            con.query(sql3, function (err, rs) {
+                            con.query(sql3, function (err) {
                                 if (err) {
                                     console.log('err');
                                 }else{
@@ -76,6 +79,14 @@ io.sockets.on('connection', function (socket) {
                             })
                             break;
                     }
+                    if (number==1) {
+                        con.query(deleteSQl, function (err){
+                            if (err) {
+                                console.log('err');
+                            }
+                        });
+                    }
+
                 }
             })
             console.log("与服务器断开");
