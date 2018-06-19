@@ -32,7 +32,7 @@ io.sockets.on('connection', function (socket) {
         var user2;
         var user3;
         var sql = "select * from room where id = '"+data.room+"'";
-        var sql1 = "delete from room where id='"+data.room+"'";
+        var sql1 = "update room set user1= null, number=number-1 where id = '" + data.room + "'";
         var sql2 = "update room set user2= null, number=number-1 where id = '" + data.room + "'";
         var sql3 = "update room set user3= null, number=number-1 where id = '" + data.room + "'";
 

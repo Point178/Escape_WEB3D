@@ -61,7 +61,7 @@ app.get('/register', function (req, res) {
             console.log('ok');
             res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
         }
-        
+
     })
 })
 
@@ -101,7 +101,7 @@ app.get('/chooseCharacter.html/female', function (req, res) {
 
 })
 
-app.get('/json',function(req,res,next){
+app.get('/json', function (req, res, next) {
     console.log('ajax');
     var selectSQL = "select id,number,status from room";
 
@@ -110,10 +110,10 @@ app.get('/json',function(req,res,next){
             console.log('err');
         }
         //console.log(rs);
-        var string=JSON.stringify(rs);
+        var string = JSON.stringify(rs);
         var data = JSON.parse(string);
         var result = {
-            data:data
+            data: data
         }
         //console.log(result);
         res.send(result);
@@ -155,9 +155,9 @@ app.post('/start', function (req, res) {
                 console.log('OK');
                 const io = require('socket.io-client');
                 var socket = io('http://127.0.0.1:3000');
-                var data={room:roomid};
-                socket.emit('room',data);
-                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + roomid+'&user='+req.session.userName);
+                var data = {room: roomid};
+                socket.emit('room', data);
+                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + roomid + '&user=' + req.session.userName);
             }
         }
     })
@@ -170,39 +170,95 @@ app.get('/hall.html/add', function (req, res) {
     var argsIndex = url.split("?name=");
     var id = argsIndex[1];
     var number;
-    req.session.id=id;
-    var sql = "select * from room where id = '"+id+"'";
-    var selectSQL2 = "update room set number = 2,user2='" + req.session.userName + "' where id = '" + id + "'";
-    var selectSQL3 = "update room set number = 3,user3='" + req.session.userName + "',status=1 where id = '" + id + "'";
+    req.session.id = id;
+    var sql = "select * from room where id = '" + id + "'";
+    //var selectSQL2 = "update room set number = 2,user2='" + req.session.userName + "' where id = '" + id + "'";
+    //var selectSQL3 = "update room set number = 3,user3='" + req.session.userName + "' where id = '" + id + "'";
+    var querySQL1 = "select * from room where user1 is null and id ='"+id+"'";
+    var querySQL2 = "select * from room where user2 is null and id ='"+id+"'";
+
+
     connection.query(sql, function (err, rs) {
         if (err) {
             console.log('err');
-        }else{
+        } else {
             number = rs[0].number;
+            var newNumber = number + 1;
+            var updateSQL1 = "update room set number = '" + newNumber + "',user1='" + req.session.userName + "' where id = '" + id + "'";
+            var updateSQL2 = "update room set number = '" + newNumber + "',user2='" + req.session.userName + "' where id = '" + id + "'";
+            var updateSQL3 = "update room set number = '" + newNumber + "',user3='" + req.session.userName + "' where id = '" + id + "'";
+            var updateSQL="update room set status=1 where id ='"+id+"'";
+
+
             console.log(number);
-            switch(number){
-                case 1:
-                    connection.query(selectSQL2, function (err, rs) {
-                        if (err) {
-                            console.log('err');
-                        }else{
-                            res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id+'&user='+req.session.userName);
+            if (number < 3) {
+                connection.query(querySQL1, function (err, rs1) {
+                    if (err)
+                        console.log("query1 err");
+                    else {
+                        if (rs1.length==0) {   //房间里有user1
+                            connection.query(querySQL2, function (err, rs2) {
+                                if (err) {
+                                    console.log('query2 err');
+                                } else {
+                                    console.log("length:"+rs2.length);
+                                    if (rs2.length==0) {      //房间里有user2
+                                        connection.query(updateSQL3, function (err, rs){
+                                            if (err) {
+                                                console.log('update3 err');
+                                            } else {
+                                                if (newNumber==3) {
+                                                    connection.query(updateSQL, function (err, rs2) {
+                                                        if (err) {
+                                                            console.log('update status err');
+                                                        }
+                                                    })
+                                                }
+                                                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id + '&user=' + req.session.userName);
+                                            }
+                                        })
+                                    }
+                                    else {                  //房间里没有user2
+                                        connection.query(updateSQL2, function (err, rs){
+                                            if (err) {
+                                                console.log('update2 err');
+                                            } else {
+                                                if (newNumber==3) {
+                                                    connection.query(updateSQL, function (err, rs2) {
+                                                        if (err) {
+                                                            console.log('update status err');
+                                                        }
+                                                    })
+                                                }
+                                                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id + '&user=' + req.session.userName);
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        } else {             //房间里没有user1
+                            connection.query(updateSQL1, function (err, rs) {
+                                if (err) {
+                                    console.log('update1 err');
+                                } else {
+                                    if (newNumber==3) {
+                                        connection.query(updateSQL, function (err, rs2) {
+                                            if (err) {
+                                                console.log('update status err');
+                                            }
+                                        })
+                                    }
+                                    res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id + '&user=' + req.session.userName);
+                                }
+                            })
                         }
-                    })
-                    break;
-                case 2:
-                    connection.query(selectSQL3, function (err, rs) {
-                        if (err) {
-                            console.log('err');
-                        }else{
-                            res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id+'&user='+req.session.userName);
-                        }
-                    })
-                    break;
-                default:
-                    res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
-                    break;
+                    }
+                })
+
+            }else {
+                res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
             }
+
         }
     })
 })
@@ -228,7 +284,7 @@ app.post('/login', function (req, res) {
                 res.redirect(301, 'http://localhost:8888/hall.html?name=' + name);
             }
         }
-        
+
     })
 })
 app.get('/logout', function (req, res) {

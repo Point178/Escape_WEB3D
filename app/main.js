@@ -7,5 +7,5 @@ require('./game.css');
 const animation = require('./animation.js');
 animation();
 
-//const client=require('./client.js');
-//client();
+const client=require('./client.js');
+client();
