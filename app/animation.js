@@ -36,7 +36,7 @@ module.exports = function () {
         yawObject = new THREE.Object3D();
         yawObject.add(pitchObject);
         yawObject.rotation.y = Math.PI;
-        yawObject.position.set(0, 200, 300);
+        yawObject.position.set(0, 200, 280);
         scene.add(yawObject);
     }
 
@@ -51,23 +51,27 @@ module.exports = function () {
             case 38: // up arrow
             case 87: // W
                 user.speed = 10;
+                //user.walk();
                 break;
 
             case 37: // left arrow
             case 65: // A
                 user.flag = 1;
                 user.speed = 10;
+                //user.walk();
                 break;
 
             case 83: // S
             case 40: // down arrow
                 user.speed = -10;
+                //user.walk();
                 break;
 
             case 68: // D
             case 39: // right arrow
                 user.flag = -1;
                 user.speed = 10;
+                //user.walk();
                 break;
         }
     });
@@ -77,20 +81,24 @@ module.exports = function () {
             case 38:
             case 87: // w
                 user.speed = 0;
+                //user.stop();
                 break;
             case 37:
             case 65: // a
                 user.flag = 0;
                 user.speed = 0;
+                //user.stop();
                 break;
             case 68: // d
             case 39:
                 user.flag = 0;
                 user.speed = 0;
+                //user.stop();
                 break;
             case 83:
             case 40:
                 user.speed = 0;
+                //user.stop();
                 break;
         }
     });
@@ -140,9 +148,7 @@ module.exports = function () {
             var pointerlockchange = function (event) {
                 if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
                     controlsEnabled = true;
-                    //controls.enabled = true;
                 } else {
-                    //controls.enabled = false;
                     instructions.style.display = '';
                 }
             };

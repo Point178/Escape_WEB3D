@@ -26,8 +26,8 @@ host: '127.0.0.1',
 compress: true,
 port: 8888
 },
-//devtool: 'cheap-source-map',
-//mode: 'development',
+devtool: 'cheap-source-map',
+mode: 'development',
 module: {
 rules: [
 {

@@ -4,12 +4,8 @@
 //main.game
 require('./game.css');
 
-/*
-const client = require('./client.js');
-client();*/
-
 const animation = require('./animation.js');
 animation();
 
-const client=require('./client.js');
-client();
+//const client=require('./client.js');
+//client();
