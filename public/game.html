@@ -12,16 +12,32 @@
 <script src="./js/Detector.js"></script>
 <script src="./js/libs/dat.gui.min.js"></script>
 <script src="./js/controls/PointerLockControls.js"></script>
-
+<script src="./js/libs/tween.min.js"></script>
 <body>
 <div id="world">
     <div id="instructions">
         <span style="font-size:40px">Click to play</span>
-        <br />
-        (W, A, S, D = Move, F = Pick up object, MOUSE = Look around)
+        <br/>
+        (W, A, S, D = Move, CLICK = Pick up object, MOUSE = Look around, Q = quit)
     </div>
 </div>
 
+<div id="contain_div">
+    <div id="bg"></div>
+    <div id="inputCodeBox">
+        <input type="number" min="0" max="9" id="code1" value="0"/>
+        <input type="number" min="0" max="9" id="code2" value="0"/>
+        <input type="number" min="0" max="9" id="code3" value="0"/>
+        <input type="number" min="0" max="9" id="code4" value="0"/>
+        <br>
+        <br>
+        <button id="confirm">OPEN</button>
+    </div>
+    <div id="diaryBox">
+        <img src="/image/model/diary.jpg" alt="diary">
+        <button id="close">CLOSE</button>
+    </div>
+</div>
 <script src="game_bundle.js"></script>
 </body>
 </html>

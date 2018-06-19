@@ -6,15 +6,17 @@
  */
 
 module.exports = function () {
-    var User = require("./user");
-    var Basement = require("./room/basement");
-    var user,scene, renderer, camera, basement;
-    var container = document.getElementById('world');
-    var instructions = document.getElementById('instructions');
-    var objects = [];
-    var controlsEnabled = false;
-    var pitchObject;
-    var yawObject;
+    let User = require("./user");
+    let Basement = require("./room/basement");
+    let user, scene, renderer, camera, basement;
+    let container = document.getElementById('world');
+    let instructions = document.getElementById('instructions');
+    let objects = [];
+    let controlsEnabled = false;
+    let pitchObject;
+    let yawObject;
+    let pickObject = []; // 0-book; 1-key; 2-lock; 3-candle, 4-basement_door;
+    let basement_pass = false;
 
     function initScene() {
         scene = new THREE.Scene();
@@ -38,12 +40,6 @@ module.exports = function () {
         yawObject.rotation.y = Math.PI;
         yawObject.position.set(0, 200, 280);
         scene.add(yawObject);
-    }
-
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
     document.body.addEventListener('keydown', function (e) {
@@ -103,6 +99,12 @@ module.exports = function () {
         }
     });
 
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
     function draw() {
         //兼容性判断
         if (!Detector.webgl) Detector.addGetWebGLMessage();
@@ -114,12 +116,46 @@ module.exports = function () {
     }
 
     function start() {
-        document.body.addEventListener('mousemove', function (event) {
-            var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-            var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+        container.addEventListener('mousemove', function (event) {
+            let movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+            let movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
             yawObject.rotation.y -= movementX * 0.002;
             pitchObject.rotation.x -= movementY * 0.002;
             pitchObject.rotation.x = Math.max(-1 * Math.PI / 2, Math.min(Math.PI / 2, pitchObject.rotation.x));
+        });
+
+        container.addEventListener('mousedown', function (e) {
+            e.preventDefault();
+
+            let mouse = new THREE.Vector2();
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            let pickRay = new THREE.Raycaster();
+            pickRay.setFromCamera(mouse, camera);
+            let number = -1;
+            for (let i = 0; i < 4; i++) {
+                let hit = pickRay.intersectObject(pickObject[i], true);
+                if (hit.length > 0) {
+                    number = i;
+                    if(number ===0){
+                        console.log("hit");
+                    }
+                    break;
+                }
+            }
+            switch (number) {
+                // 0-book; 1-key; 2-lock; 3-candle;
+                case 0:
+                    showDiary();
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    inputCode();
+                    break;
+                case 3:
+                    break;
+            }
         });
         animate();
     }
@@ -127,6 +163,7 @@ module.exports = function () {
     function animate() {
         if (controlsEnabled === true) {
             user.tick(pitchObject, yawObject, objects);
+            TWEEN.update();
             renderer.render(scene, camera);
         }
         requestAnimationFrame(animate);
@@ -135,50 +172,56 @@ module.exports = function () {
     function load() {
         user = new User({
             scene: scene,
-            camera: camera,
             cb: start
         });
     }
 
-    window.onload = function () {
-        var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-        if (havePointerLock) {
-            var element = document.body;
-            var pointerlockchange = function (event) {
-                if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
-                    controlsEnabled = true;
-                } else {
-                    instructions.style.display = '';
-                }
-            };
+    function inputCode() {
+        document.getElementById("bg").style.display ="block";
+        document.getElementById("inputCodeBox").style.display="block";
+    }
 
-            var pointerlockerror = function (event) {
-                instructions.style.display = '';
-            };
+    function showDiary(){
+        document.getElementById("bg").style.display ="block";
+        document.getElementById("diaryBox").style.display="block";
+    }
 
-            // Hook pointer lock state change events
-            document.addEventListener('pointerlockchange', pointerlockchange, false);
-            document.addEventListener('mozpointerlockchange', pointerlockchange, false);
-            document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
-            document.addEventListener('pointerlockerror', pointerlockerror, false);
-            document.addEventListener('mozpointerlockerror', pointerlockerror, false);
-            document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
+    document.getElementById("confirm").onclick = function(){
+        if(!basement_pass) {
+            let code1 = document.getElementById("code1").value;
+            let code2 = document.getElementById("code2").value;
+            let code3 = document.getElementById("code3").value;
+            let code4 = document.getElementById("code4").value;
+            if (code1 === "0" && code2 === "0" && code3 === "0" && code4 === "0") {
+                //开门
+                new TWEEN.Tween(pickObject[4].rotation).to({
+                    z : Math.PI / 2}, 2000).easing( TWEEN.Easing.Elastic.Out).start();
 
-            instructions.addEventListener('click', function (event) {
-                instructions.style.display = 'none';
-                // Ask the browser to lock the pointer
-                element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-                element.requestPointerLock();
-            }, false);
-        } else {
-            instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+                //pickObject[4].rotation.z = Math.PI / 2;
+                basement_pass = true;
+            }
         }
+        document.getElementById("bg").style.display = "none";
+        document.getElementById("inputCodeBox").style.display = "none";
+    };
 
+    document.getElementById("close").onclick = function(){
+        document.getElementById("bg").style.display = "none";
+        document.getElementById("diaryBox").style.display = "none";
+    };
+
+    window.onload = function () {
+        instructions.addEventListener('click', function (event) {
+            instructions.style.display = 'none';
+            controlsEnabled = true;
+        }, false);
         draw();
         basement = new Basement({
             scene: scene,
             objects: objects,
+            pick: pickObject,
             cb: load
         });
     };
-}
+
+};

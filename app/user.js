@@ -106,10 +106,10 @@ User.prototype.tick = function (pitchObject, yawObject, objects) {
     var mixerUpdateDelta = this.clock.getDelta();
     this.mixer.update(mixerUpdateDelta);
 
+    this.user.rotation.y = yawObject.rotation.y;
     if (this.speed === 0) {
         return;
     }
-    this.user.rotation.y = yawObject.rotation.y;
     this.dirRotation = yawObject.rotation.y - Math.PI + (Math.PI / 2) * this.flag;
 
     var rotation = this.dirRotation;
@@ -138,8 +138,8 @@ User.prototype.tick = function (pitchObject, yawObject, objects) {
     this.user.position.z += speedZ;
     this.user.position.x += speedX;
 
-    yawObject.position.x = this.user.position.x;
-    yawObject.position.z = this.user.position.z;
+    yawObject.position.x = this.user.position.x - Math.sin(this.user.rotation.y - Math.PI) * 70 ;
+    yawObject.position.z = this.user.position.z - Math.cos(this.user.rotation.y - Math.PI) * 70 ;
 };
 
 

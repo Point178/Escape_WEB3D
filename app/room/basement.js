@@ -2,6 +2,7 @@
  * Created by 昕点陈 on 2018/6/17.
  */
 function Basement(params) {
+    const ThreeBSP = require('../threeBSP')(THREE);
     var scene = params.scene;
     
     // Create a cube used to build the floor and walls
@@ -58,11 +59,12 @@ function Basement(params) {
     var frontWall = new THREE.Mesh(cube, wallMat);
     frontWall.rotation.x = Math.PI / 180 * 90;
     frontWall.position.set(0, 500, 600);
-    scene.add(frontWall);
-    params.objects.push(frontWall);
+    var cutWall = new ThreeBSP(frontWall);
+    //scene.add(frontWall);
+    //params.objects.push(frontWall);
 
     // door
-    var doorCube = new THREE.CubeGeometry(200, 5, 300);
+    var doorCube = new THREE.CubeGeometry(400, 20, 300);
     var doorMat = new THREE.MeshLambertMaterial(
         {
             map: THREE.ImageUtils.loadTexture('/image/model/door.jpg'),
@@ -73,6 +75,19 @@ function Basement(params) {
     door.position.set(0, 150, 595);
     scene.add(door);
     params.objects.push(door);
+    params.pick[4] = door;
+
+    var cut = new ThreeBSP(door);
+    var resultBSP = cutWall.subtract(cut);
+    var result = resultBSP.toMesh(wallMat);
+    result.material.flatshading = THREE.FlatShading;
+    result.geometry.computeFaceNormals();  //重新计算几何体侧面法向量
+    result.geometry.computeVertexNormals();
+    result.material.needsUpdate = true;  //更新纹理
+    result.geometry.buffersNeedUpdate = true;
+    result.geometry.uvsNeedUpdate = true;
+    scene.add(result);
+    params.objects.push(result);
 
     //desk
     new THREE.MTLLoader()
@@ -156,10 +171,11 @@ function Basement(params) {
                 .load('key.obj', function (object) {
                         object.rotation.z = -1 * Math.PI / 180 * 90;
                         object.position.y = 30;
-                        object.position.z = -550;
-                        object.position.x = 200;
+                        object.position.z = -570;
+                        object.position.x = 260;
                         object.scale.set(0.2, 0.2, 0.2);
                         scene.add(object);
+                        params.pick[1] = object;
                     },
                     function () {
                         console.log("success");
@@ -180,9 +196,10 @@ function Basement(params) {
                         object.rotation.y = Math.PI / 180 * 90;
                         object.position.y = 200;
                         object.position.z = 600;
-                        object.position.x = 180;
+                        object.position.x = 280;
                         object.scale.set(20, 20, 20);
                         scene.add(object);
+                        params.pick[2] = object;
                     },
                     function () {
                         console.log("success");
@@ -206,6 +223,7 @@ function Basement(params) {
                         object.position.x = -60;
                         object.scale.set(3, 3, 3);
                         scene.add(object);
+                        params.pick[3] = object;
                     },
                     function () {
                         console.log("success");
@@ -333,6 +351,7 @@ function Basement(params) {
                         object.position.x = -140;
                         object.scale.set(2, 3, 2);
                         scene.add(object);
+                        params.pick[0] = object;
                     },
                     function () {
                         console.log("success");
@@ -630,7 +649,7 @@ function Basement(params) {
                 .setPath('/image/model/bookstore/')
                 .setMaterials(materials)
                 .load('big.obj', function (object) {
-                        object.position.y = 10;
+                        object.position.y = 5;
                         object.position.z = -420;
                         object.position.x = -570;
                         object.scale.set(11, 5, 4);
@@ -651,7 +670,7 @@ function Basement(params) {
                 .setPath('/image/model/bookstore/')
                 .setMaterials(materials)
                 .load('big.obj', function (object) {
-                        object.position.y = 10;
+                        object.position.y = 5;
                         object.position.z = -420;
                         object.position.x = -200;
                         object.scale.set(11, 5, 4);
