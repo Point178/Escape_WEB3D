@@ -50,28 +50,28 @@ module.exports = function () {
         switch (e.keyCode) {
             case 38: // up arrow
             case 87: // W
-                user.speed = 10;
-                //user.walk();
+                user.speed = 3;
+                user.walk();
                 break;
 
             case 37: // left arrow
             case 65: // A
                 user.flag = 1;
-                user.speed = 10;
-                //user.walk();
+                user.speed = 3;
+                user.walk();
                 break;
 
             case 83: // S
             case 40: // down arrow
-                user.speed = -10;
-                //user.walk();
+                user.speed = -3;
+                user.walk();
                 break;
 
             case 68: // D
             case 39: // right arrow
                 user.flag = -1;
-                user.speed = 10;
-                //user.walk();
+                user.speed = 3;
+                user.walk();
                 break;
         }
     });
@@ -81,34 +81,26 @@ module.exports = function () {
             case 38:
             case 87: // w
                 user.speed = 0;
-                //user.stop();
+                user.stop();
                 break;
             case 37:
             case 65: // a
                 user.flag = 0;
                 user.speed = 0;
-                //user.stop();
+                user.stop();
                 break;
             case 68: // d
             case 39:
                 user.flag = 0;
                 user.speed = 0;
-                //user.stop();
+                user.stop();
                 break;
             case 83:
             case 40:
                 user.speed = 0;
-                //user.stop();
+                user.stop();
                 break;
         }
-    });
-
-    document.body.addEventListener('mousemove', function (event) {
-        var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-        var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-        yawObject.rotation.y -= movementX * 0.002;
-        pitchObject.rotation.x -= movementY * 0.002;
-        pitchObject.rotation.x = Math.max(-1 * Math.PI / 2, Math.min(Math.PI / 2, pitchObject.rotation.x));
     });
 
     function draw() {
@@ -122,6 +114,13 @@ module.exports = function () {
     }
 
     function start() {
+        document.body.addEventListener('mousemove', function (event) {
+            var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+            var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+            yawObject.rotation.y -= movementX * 0.002;
+            pitchObject.rotation.x -= movementY * 0.002;
+            pitchObject.rotation.x = Math.max(-1 * Math.PI / 2, Math.min(Math.PI / 2, pitchObject.rotation.x));
+        });
         animate();
     }
 
