@@ -10,7 +10,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '123456',
+    password: '970511',
     database: 'escape',
     port: '3306'
 });
@@ -27,7 +27,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('join', (data) => {
         console.log("a new player");
         socket.join(data.room);
-        io.sockets.in(data.room).emit('system',data.user+'加入了房间');
+        io.sockets.in(data.room).emit('system',data.user,data.gender+'加入了房间');
         var user;
         var user2;
         var user3;

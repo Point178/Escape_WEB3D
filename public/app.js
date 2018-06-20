@@ -17,7 +17,7 @@ var bodyparser = require('body-parser');
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '123456',
+    password: '970511',
     database: 'escape',
     port: '3306'
 });
@@ -142,6 +142,15 @@ app.post('/start', function (req, res) {
     var roomid = req.body.roomid;
     req.session.id = req.body.roomid;
     var room = {id: roomid, num: 1, user1: req.session.userName};
+    var gsql = "select * from users where userName = '" + req.session.userName + "'";
+    var gender;
+    connection.query(gsql, function (err, rs) {
+        if (err) {
+            console.log('fail');
+        } else {
+            gender=rs[0].gender;
+        }
+    })
     connection.query('insert into room set ?', room, function (err, rs) {
         if (err) {
             console.log('fail');
@@ -157,7 +166,7 @@ app.post('/start', function (req, res) {
                 var socket = io('http://127.0.0.1:3000');
                 var data = {room: roomid};
                 socket.emit('room', data);
-                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + roomid + '&user=' + req.session.userName);
+                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + roomid + '&user=' + req.session.userName + '&gender=' + gender);
             }
         }
     })
@@ -166,16 +175,22 @@ app.post('/start', function (req, res) {
 
 app.get('/hall.html/add', function (req, res) {
     var url = req.url;
-    console.log('djiaf');
     var argsIndex = url.split("?name=");
     var id = argsIndex[1];
     var number;
+    var gender;
     req.session.id = id;
     var sql = "select * from room where id = '" + id + "'";
     var querySQL1 = "select * from room where user1 is null and id ='"+id+"'";
     var querySQL2 = "select * from room where user2 is null and id ='"+id+"'";
-
-
+    var gsql = "select * from users where userName = '" + req.session.userName + "'";
+    connection.query(gsql, function (err, rs) {
+        if (err) {
+            console.log('fail');
+        } else {
+            gender=rs[0].gender;
+        }
+    })
     connection.query(sql, function (err, rs) {
         if (err) {
             console.log('err');
@@ -212,7 +227,7 @@ app.get('/hall.html/add', function (req, res) {
                                                         }
                                                     })
                                                 }
-                                                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id + '&user=' + req.session.userName);
+                                                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id + '&user=' + req.session.userName + '&gender=' + gender);
                                             }
                                         })
                                     }
@@ -228,7 +243,7 @@ app.get('/hall.html/add', function (req, res) {
                                                         }
                                                     })
                                                 }
-                                                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id + '&user=' + req.session.userName);
+                                                res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id + '&user=' + req.session.userName + '&gender=' + gender);
                                             }
                                         })
                                     }
@@ -246,7 +261,7 @@ app.get('/hall.html/add', function (req, res) {
                                             }
                                         })
                                     }
-                                    res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id + '&user=' + req.session.userName);
+                                    res.redirect(301, 'http://127.0.0.1:8888/game.html?name=' + id + '&user=' + req.session.userName + '&gender=' + gender);
                                 }
                             })
                         }

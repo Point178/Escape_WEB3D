@@ -8,13 +8,17 @@ module.exports = function() {
     var arg = argsIndex[1];
     var argsIndex = arg.split("&user=");
     var roomName=argsIndex[0];
-    var userName=argsIndex[1];
+    var arg=argsIndex[1];
+    var argsIndex = arg.split("&gender=");
+    var userName = argsIndex[0];
+    var gender = argsIndex[1];
     //alert(userName);
     const io = require('socket.io-client');
     var socket = io('http://127.0.0.1:3000');
     var joinData={
         room:roomName,
-        user:userName
+        user:userName,
+        gender:gender
     };
     socket.emit('join',joinData);
     //alert("发送消息");
