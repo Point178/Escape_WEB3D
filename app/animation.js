@@ -146,7 +146,9 @@ module.exports = function () {
             switch (number) {
                 // 0-book; 1-key; 2-lock; 3-candle;
                 case 0:
-                    showDiary();
+                    if(controlsEnabled === true) {
+                        showDiary();
+                    }
                     break;
                 case 1:
                     break;
