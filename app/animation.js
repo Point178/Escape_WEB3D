@@ -125,41 +125,45 @@ module.exports = function () {
         });
 
         container.addEventListener('mousedown', function (e) {
-            e.preventDefault();
+                e.preventDefault();
 
-            let mouse = new THREE.Vector2();
-            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-            let pickRay = new THREE.Raycaster();
-            pickRay.setFromCamera(mouse, camera);
-            let number = -1;
-            for (let i = 0; i < 4; i++) {
-                let hit = pickRay.intersectObject(pickObject[i], true);
-                if (hit.length > 0) {
-                    number = i;
-                    if(number ===0){
-                        console.log("hit");
+                let mouse = new THREE.Vector2();
+                mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+                let pickRay = new THREE.Raycaster();
+                pickRay.setFromCamera(mouse, camera);
+                let number = -1;
+                for (let i = 0; i < 4; i++) {
+                    let hit = pickRay.intersectObject(pickObject[i], true);
+                    if (hit.length > 0) {
+                        number = i;
+                        break;
                     }
-                    break;
                 }
+                switch (number) {
+                    // 0-book; 1-key; 2-lock; 3-candle;
+                    case 0:
+                        if (controlsEnabled === true) {
+                            showDiary();
+                        }
+                        break;
+                    case 1:
+                        if (controlsEnabled === true) {
+                            pickupKey();
+                        }
+                        break;
+                    case 2:
+                        if (controlsEnabled === true) {
+                            inputCode();
+                        }
+                        break;
+                    case 3:
+                        //TODO
+                        break;
+                }
+                animate();
             }
-            switch (number) {
-                // 0-book; 1-key; 2-lock; 3-candle;
-                case 0:
-                    if(controlsEnabled === true) {
-                        showDiary();
-                    }
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    inputCode();
-                    break;
-                case 3:
-                    break;
-            }
-        });
-        animate();
+        );
     }
 
     function animate() {
@@ -167,6 +171,7 @@ module.exports = function () {
             user.tick(pitchObject, yawObject, objects);
             TWEEN.update();
             renderer.render(scene, camera);
+            //console.log("key:"+pickObject[1].position.x+" "+pickObject[1].position.y+" "+pickObject[1].position.z);
         }
         requestAnimationFrame(animate);
     }
@@ -179,17 +184,26 @@ module.exports = function () {
     }
 
     function inputCode() {
-        document.getElementById("bg").style.display ="block";
-        document.getElementById("inputCodeBox").style.display="block";
+        document.getElementById("bg").style.display = "block";
+        document.getElementById("inputCodeBox").style.display = "block";
     }
 
-    function showDiary(){
-        document.getElementById("bg").style.display ="block";
-        document.getElementById("diaryBox").style.display="block";
+    function showDiary() {
+        document.getElementById("bg").style.display = "block";
+        document.getElementById("diaryBox").style.display = "block";
     }
 
-    document.getElementById("confirm").onclick = function(){
-        if(!basement_pass) {
+    function pickupKey() {
+        pickObject[1].position.x = user.user.position.x;
+        pickObject[1].position.y = 400;
+        pickObject[1].position.z = user.user.position.z;
+        user.user.child = pickObject[1];
+        //scene.remove(user);
+        scene.add(user.user);
+    }
+
+    document.getElementById("confirm").onclick = function () {
+        if (!basement_pass) {
             let code1 = document.getElementById("code1").value;
             let code2 = document.getElementById("code2").value;
             let code3 = document.getElementById("code3").value;
@@ -197,7 +211,8 @@ module.exports = function () {
             if (code1 === "0" && code2 === "0" && code3 === "0" && code4 === "0") {
                 //开门
                 new TWEEN.Tween(pickObject[4].rotation).to({
-                    z : Math.PI / 2}, 2000).easing( TWEEN.Easing.Elastic.Out).start();
+                    z: Math.PI / 2
+                }, 2000).easing(TWEEN.Easing.Elastic.Out).start();
 
                 //pickObject[4].rotation.z = Math.PI / 2;
                 basement_pass = true;
@@ -207,7 +222,7 @@ module.exports = function () {
         document.getElementById("inputCodeBox").style.display = "none";
     };
 
-    document.getElementById("close").onclick = function(){
+    document.getElementById("close").onclick = function () {
         document.getElementById("bg").style.display = "none";
         document.getElementById("diaryBox").style.display = "none";
     };

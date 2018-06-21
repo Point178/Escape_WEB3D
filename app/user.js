@@ -11,10 +11,10 @@ function User(params) {
 
     this.dirRotation = 0; // 方向上的旋转
     var mixer;
-    var idleAction, walkAction, actions;
+    var actions = [];
 
     // user
-    new THREE.ObjectLoader().load('image/model/marine_anims_core.json', function (loadedObject) {
+    /*new THREE.ObjectLoader().load('image/model/marine_anims_core.json', function (loadedObject) {
         loadedObject.traverse(function (child) {
             if (child instanceof THREE.SkinnedMesh) {
                 this.mesh = child;
@@ -43,7 +43,46 @@ function User(params) {
         activateAllActions();
         self.prepareCrossFade(walkAction, idleAction, 1.0);
     },function () {
-        console.log("success");
+        params.cb();
+    }, function () {
+        console.log("error");
+    });*/
+
+    //load test
+    var loader = new THREE.FBXLoader();
+    loader.load("image/model/Walking.fbx", function (loadedObject) {
+        //添加骨骼辅助
+        loadedObject.traverse(function (child) {
+            if (child.isMesh) {
+                //this.mesh = child;
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
+
+        user = loadedObject;
+        //user = this.mesh;
+        user.position.y = 10;
+        user.position.x = 0;
+        user.position.z = 350;
+        //user.rotation.y = -1 * Math.PI;
+        user.scale.set(1.2,1.2,1.2);
+        self.user = user;
+
+        params.scene.add(user);
+        this.skeleton = new THREE.SkeletonHelper(user);
+        //this.skeleton.visible = false;
+        params.scene.add(skeleton);
+        mixer = loadedObject.mixer = new THREE.AnimationMixer(loadedObject);
+        //mixer.timeScale = 1.25;
+        console.log(user);
+        let actions = [];
+        for(var i=0; i<loadedObject.animations.length; i++){
+            actions[i] = mixer.clipAction(loadedObject.animations[i]);
+        }
+        self.actions = actions;
+        self.mixer = mixer;
+    },function () {
         params.cb();
     }, function () {
         console.log("error");
@@ -95,18 +134,25 @@ function User(params) {
 }
 
 User.prototype.walk = function(){
-    this.prepareCrossFade(this.idleAction, this.walkAction, 0,5);
+    //this.prepareCrossFade(this.idleAction, this.walkAction, 0,5);
+    for(let i=0; i<this.actions.length; i++){
+        this.actions[i].stop();
+    }
+    this.actions[0].play();
 };
 
 User.prototype.stop = function(){
-    this.prepareCrossFade(this.walkAction, this.idleAction, 0.5);
+    //this.prepareCrossFade(this.walkAction, this.idleAction, 0.5);
+    for(let i=0; i<this.actions.length; i++){
+        this.actions[i].stop();
+    }
 };
 
 User.prototype.tick = function (pitchObject, yawObject, objects) {
     var mixerUpdateDelta = this.clock.getDelta();
     this.mixer.update(mixerUpdateDelta);
 
-    this.user.rotation.y = yawObject.rotation.y;
+    this.user.rotation.y = yawObject.rotation.y - Math.PI;
     if (this.speed === 0) {
         return;
     }
@@ -138,8 +184,8 @@ User.prototype.tick = function (pitchObject, yawObject, objects) {
     this.user.position.z += speedZ;
     this.user.position.x += speedX;
 
-    yawObject.position.x = this.user.position.x - Math.sin(this.user.rotation.y - Math.PI) * 70 ;
-    yawObject.position.z = this.user.position.z - Math.cos(this.user.rotation.y - Math.PI) * 70 ;
+    yawObject.position.x = this.user.position.x - Math.sin(this.user.rotation.y/* - Math.PI*/) * 70 ;
+    yawObject.position.z = this.user.position.z - Math.cos(this.user.rotation.y/* - Math.PI*/) * 70 ;
 };
 
 
