@@ -170,9 +170,9 @@ function Basement(params) {
                 .setMaterials(materials)
                 .load('key.obj', function (object) {
                         object.rotation.z = -1 * Math.PI / 180 * 90;
-                        object.position.y = 30;
+                        object.position.y = 10;
                         object.position.z = -570;
-                        object.position.x = 260;
+                        object.position.x = 270;
                         object.scale.set(0.2, 0.2, 0.2);
                         scene.add(object);
                         params.pick[1] = object;

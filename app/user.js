@@ -4,6 +4,8 @@
 function User(params) {
     var self = this;
     var user;
+    this.username = params.username;
+    this.gender = params.gender;
     this.clock = new THREE.Clock();
 
     this.speed = 0;
@@ -61,10 +63,10 @@ function User(params) {
         });
 
         user = loadedObject;
-        //user = this.mesh;
-        user.position.y = 10;
-        user.position.x = 0;
-        user.position.z = 350;
+        user.position = lastLocation;
+        user.position.y = lastLocation[1];
+        user.position.x = lastLocation[0];
+        user.position.z = lastLocation[2];
         //user.rotation.y = -1 * Math.PI;
         user.scale.set(1.2,1.2,1.2);
         self.user = user;
@@ -75,13 +77,14 @@ function User(params) {
         params.scene.add(skeleton);
         mixer = loadedObject.mixer = new THREE.AnimationMixer(loadedObject);
         //mixer.timeScale = 1.25;
-        console.log(user);
+        console.log(loadedObject);
         let actions = [];
         for(var i=0; i<loadedObject.animations.length; i++){
             actions[i] = mixer.clipAction(loadedObject.animations[i]);
         }
         self.actions = actions;
         self.mixer = mixer;
+        console.log(loadedObject)
     },function () {
         params.cb();
     }, function () {
@@ -187,6 +190,15 @@ User.prototype.tick = function (pitchObject, yawObject, objects) {
     yawObject.position.x = this.user.position.x - Math.sin(this.user.rotation.y/* - Math.PI*/) * 70 ;
     yawObject.position.z = this.user.position.z - Math.cos(this.user.rotation.y/* - Math.PI*/) * 70 ;
 };
+
+User.prototype.setLocation = function(position, rotation){
+    this.user.position.x = position[0];
+    this.user.position.y = position[1];
+    this.user.position.z = position[2];
+    this.user.rotation.x = rotation[0];
+    this.user.rotation.y = rotation[1];
+    this.user.rotation.z = rotation[2];
+}
 
 
 module.exports = User;

@@ -6,6 +6,7 @@
  */
 
 module.exports = function () {
+    let isStart = false;
     let User = require("./user");
     let Basement = require("./room/basement");
     let user, scene, renderer, camera, basement;
@@ -13,10 +14,23 @@ module.exports = function () {
     let instructions = document.getElementById('instructions');
     let objects = [];
     let controlsEnabled = false;
-    let pitchObject;
-    let yawObject;
+    let pitchObject, yawObject;
     let pickObject = []; // 0-book; 1-key; 2-lock; 3-candle, 4-basement_door;
     let basement_pass = false;
+
+    var argsIndex = url.split("?name=");
+    var arg = argsIndex[1];
+    argsIndex = arg.split("&user=");
+    var roomName=argsIndex[0];
+    arg=argsIndex[1];
+    argsIndex = arg.split("&gender=");
+    var userName = argsIndex[0];
+    var gender = argsIndex[1];
+    const io = require('socket.io-client');
+    var socket = io('http://127.0.0.1:3000');
+
+    let players = [];
+    let isKey = false;
 
     function initScene() {
         scene = new THREE.Scene();
@@ -116,6 +130,15 @@ module.exports = function () {
     }
 
     function start() {
+            //join the room
+            var joinData={
+                room:roomName,
+                user:userName,
+                gender:gender,
+                position:[user.user.position.x, user.user.position.y, user.user.position.z],
+                rotation:[user.user.rotation.x, user.user.rotation.y, user.user.rotation.z]
+            };
+            socket.emit('join',joinData);
         container.addEventListener('mousemove', function (event) {
             let movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
             let movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
@@ -143,17 +166,18 @@ module.exports = function () {
                 switch (number) {
                     // 0-book; 1-key; 2-lock; 3-candle;
                     case 0:
-                        if (controlsEnabled === true) {
+                        if (controlsEnabled === true && isStart) {
                             showDiary();
                         }
                         break;
                     case 1:
-                        if (controlsEnabled === true) {
-                            pickupKey();
+                        if (controlsEnabled === true && isStart) {
+                            //pickupKey();
+                            socket.emit('key', userName);
                         }
                         break;
                     case 2:
-                        if (controlsEnabled === true) {
+                        if (controlsEnabled === true && isStart) {
                             inputCode();
                         }
                         break;
@@ -161,9 +185,9 @@ module.exports = function () {
                         //TODO
                         break;
                 }
-                animate();
-            }
-        );
+            });
+
+        animate();
     }
 
     function animate() {
@@ -171,7 +195,12 @@ module.exports = function () {
             user.tick(pitchObject, yawObject, objects);
             TWEEN.update();
             renderer.render(scene, camera);
-            //console.log("key:"+pickObject[1].position.x+" "+pickObject[1].position.y+" "+pickObject[1].position.z);
+
+            var updateData = {
+                position: [user.user.position.x, user.user.position.y, user.user.position.z],
+                rotation:[user.user.rotation.x, user.user.rotation.y, user.user.rotation.z]
+            };
+            socket.emit('update', updateData);
         }
         requestAnimationFrame(animate);
     }
@@ -179,7 +208,9 @@ module.exports = function () {
     function load() {
         user = new User({
             scene: scene,
-            cb: start
+            username:userName,
+            gender:gender,
+            cb: start,
         });
     }
 
@@ -194,12 +225,12 @@ module.exports = function () {
     }
 
     function pickupKey() {
-        pickObject[1].position.x = user.user.position.x;
-        pickObject[1].position.y = 400;
-        pickObject[1].position.z = user.user.position.z;
-        user.user.child = pickObject[1];
-        //scene.remove(user);
-        scene.add(user.user);
+        //pickObject[1].position.x = user.user.children[3].position.x;
+        //pickObject[1].position.y = 150;
+        //pickObject[1].position.z = user.user.children[3].position.z;
+        //pickObject[1].scale.set(0.02, 0.02, 0.02);
+        //user.user.add(pickObject[1]);
+        scene.remove(pickObject[1]);
     }
 
     document.getElementById("confirm").onclick = function () {
@@ -210,12 +241,7 @@ module.exports = function () {
             let code4 = document.getElementById("code4").value;
             if (code1 === "0" && code2 === "0" && code3 === "0" && code4 === "0") {
                 //开门
-                new TWEEN.Tween(pickObject[4].rotation).to({
-                    z: Math.PI / 2
-                }, 2000).easing(TWEEN.Easing.Elastic.Out).start();
-
-                //pickObject[4].rotation.z = Math.PI / 2;
-                basement_pass = true;
+                socket.emit('door', 'basement');
             }
         }
         document.getElementById("bg").style.display = "none";
@@ -230,6 +256,7 @@ module.exports = function () {
     window.onload = function () {
         instructions.addEventListener('click', function (event) {
             instructions.style.display = 'none';
+            document.getElementById("waiting").style.display='block';
             controlsEnabled = true;
         }, false);
         draw();
@@ -241,4 +268,71 @@ module.exports = function () {
         });
     };
 
+    socket.on('start',(data)=>{
+        if(data === 'true'){
+            isStart = true;
+            document.getElementById("waiting").style.display='none';
+        }
+    })
+
+    socket.on('connect', (data) =>{
+        var player = new User({
+            scene:scene,
+            username:data.user,
+            gender:data.gender
+        });
+        players.add(player);
+        player.setLocation(data.position, data.rotation);
+    });
+
+    socket.on('update', (data)=>{
+       var i = 0;
+       while(i < players.length){
+           if(players[i].username === data.user){
+               players[i].setLocation(data.position, data.rotation);
+               break;
+           }
+           i++;
+       }
+    });
+
+    socket.on('disconnection', (data)=>{
+        var i = 0;
+        while(i < players.length){
+            if(players[i].username === data.user){
+                // TODO system message
+                players.remove(players[i]);
+            }
+        }
+    });
+
+    socket.on('door', (data)=>{
+        if(data === 'basement'){
+            new TWEEN.Tween(pickObject[4].rotation).to({
+                z: Math.PI / 2
+            }, 2000).easing(TWEEN.Easing.Elastic.Out).start();
+
+            basement_pass = true;
+        }else{
+            //Todo
+        }
+    });
+
+    socket.on('key', (data)=>{
+        pickupKey();
+        var name = data;
+        if(data === userName){
+            //Todo
+            isKey = true;
+        }else{
+            //Todo
+
+        }
+    });
+
+    socket.on('chat',(data)=>{
+        var name= data.user;
+        var content = data.content;
+        //Todo
+    })
 };
