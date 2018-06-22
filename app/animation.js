@@ -17,7 +17,7 @@ module.exports = function () {
     let pitchObject, yawObject;
     let pickObject = []; // 0-book; 1-key; 2-lock; 3-candle, 4-basement_door;
 
-    /*var argsIndex = url.split("?name=");
+    var argsIndex = url.split("?name=");
     var arg = argsIndex[1];
     argsIndex = arg.split("&user=");
     var roomName = argsIndex[0];
@@ -26,10 +26,7 @@ module.exports = function () {
     var userName = argsIndex[0];
     var gender = argsIndex[1];
     const io = require('socket.io-client');
-    var socket = io('http://127.0.0.1:3000');*/
-    var userName = "point178";
-    var roomName = "aa";
-    var gender = 0;
+    var socket = io('http://127.0.0.1:3000');
 
     let players = [];
     let isKey = false;
@@ -170,7 +167,7 @@ module.exports = function () {
             rotation: [user.user.rotation.x, user.user.rotation.y, user.user.rotation.z]
         };
         console.log(joinData);
-        //socket.emit('join', joinData);
+        socket.emit('join', joinData);
         container.addEventListener('mousemove', function (event) {
             let movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
             let movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
@@ -232,7 +229,7 @@ module.exports = function () {
                 position: [user.user.position.x, user.user.position.y, user.user.position.z],
                 rotation: [user.user.rotation.x, user.user.rotation.y, user.user.rotation.z]
             };
-            //socket.emit('update', updateData);
+            socket.emit('update', updateData);
         }
         requestAnimationFrame(animate);
     }
@@ -293,7 +290,7 @@ module.exports = function () {
             let code4 = document.getElementById("code4").value;
             if (code1 === "1" && code2 === "7" && code3 === "8" && code4 === "3") {
                 //开门
-                //socket.emit('code', username);
+                socket.emit('code', username);
             }
         }
         document.getElementById("bg").style.display = "none";
@@ -309,6 +306,7 @@ module.exports = function () {
         instructions.addEventListener('click', function (event) {
             instructions.style.display = 'none';
             document.getElementById("waiting").style.display = 'block';
+            document.getElementById("packet").style.display = 'block';
             controlsEnabled = true;
         }, false);
         draw();
@@ -331,7 +329,7 @@ module.exports = function () {
             t = window.setTimeout("document.getElementById('chat_float').setAttribute('class', 'd-inline-flex p-2 float-left rounded invisible');", 3000);
         }
     }
-/*
+
     socket.on('start', (data) => {
         if (data === 'true') {
             isStart = true;
@@ -370,7 +368,6 @@ module.exports = function () {
         var i = 0;
         while (i < players.length) {
             if (players[i].username === data) {
-                // TODO system message
                 showMessage("SYSTEM", "Player " + data +" leaves the room!");
                 addMsg("SYSTEM", "Player " + data +" leaves the room!");
                 scene.remove(players[i].user);
@@ -393,7 +390,6 @@ module.exports = function () {
     });
 
     socket.on('hint', (data) =>{
-        //TODO
         showMessage("SYSTEM", data);
         addMsg("SYSTEM", data);
     });
@@ -401,10 +397,8 @@ module.exports = function () {
     socket.on('key', (data) => {
         pickupKey();
         if (data === userName) {
-            //Todo
             isKey = true;
-        } else {
-            //Todo
+            document.getElementById("key").src = "/image/model/key.png";
         }
         showMessage("SYSTEM", "Player " + data +" finds a key!");
         addMsg("SYSTEM", "Player " + data +" finds a key!");
@@ -413,7 +407,6 @@ module.exports = function () {
     socket.on('chat', (data) => {
         var name = data.user;
         var content = data.content;
-        //Todo
         showMessage(name, content);
         addMsg(name, content);
     });
@@ -421,12 +414,10 @@ module.exports = function () {
     socket.on('candle', (data) =>{
         pickupCandle();
         if (data === userName) {
-            //Todo
             isCandle = true;
-        } else {
-            //Todo
+            document.getElementById("candle").src = "/image/model/candle.png";
         }
         showMessage("SYSTEM", "Player " + data +" finds a candle!");
         addMsg("SYSTEM", "Player " + data +" finds a candle!");
-    })*/
+    })
 };
