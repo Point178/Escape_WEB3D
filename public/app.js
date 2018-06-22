@@ -17,7 +17,7 @@ var bodyparser = require('body-parser');
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '970511',
+    password: '123456',
     database: 'escape',
     port: '3306'
 });
@@ -35,15 +35,15 @@ app.use(session({
 app.use(express.static(__dirname));
 app.get('/', function (req, res) {
     res.sendFile(__dirname + "/" + "register.html");
-})
+});
 
 
 app.get('/login.html', function (req, res) {
     res.render(__dirname + "/" + "login.html");
-})
+});
 app.get('/register.html', function (req, res) {
     res.render(__dirname + "/" + "register.html");
-})
+});
 
 app.get('/register', function (req, res) {
     var name = req.query.username;
@@ -61,7 +61,7 @@ app.get('/register', function (req, res) {
         }
 
     })
-})
+});
 
 app.get('/chooseCharacter.html/male', function (req, res) {
     var selectSQL = "update users set gender = 0 where userName = '" + req.session.userName + "'";
@@ -79,7 +79,8 @@ app.get('/chooseCharacter.html/male', function (req, res) {
         }
     })
 
-})
+});
+
 app.get('/chooseCharacter.html/female', function (req, res) {
     console.log(req.session.userName);
     var selectSQL = "update users set gender = 1 where userName = '" + req.session.userName + "'";
@@ -97,7 +98,7 @@ app.get('/chooseCharacter.html/female', function (req, res) {
         }
     })
 
-})
+});
 
 app.get('/json', function (req, res, next) {
     console.log('ajax');
@@ -111,7 +112,7 @@ app.get('/json', function (req, res, next) {
         var data = JSON.parse(string);
         var result = {
             data: data
-        }
+        };
         res.send(result);
     });
 });
@@ -133,7 +134,7 @@ app.post('/password', function (req, res) {
         }
     })
 
-})
+});
 app.post('/start', function (req, res) {
     var roomid = req.body.roomid;
     req.session.id = req.body.roomid;
@@ -146,7 +147,7 @@ app.post('/start', function (req, res) {
         } else {
             gender=rs[0].gender;
         }
-    })
+    });
     connection.query('insert into room set ?', room, function (err, rs) {
         if (err) {
             console.log('fail');
@@ -167,7 +168,7 @@ app.post('/start', function (req, res) {
         }
     })
 
-})
+});
 
 app.get('/hall.html/add', function (req, res) {
     var url = req.url;
@@ -186,7 +187,7 @@ app.get('/hall.html/add', function (req, res) {
         } else {
             gender=rs[0].gender;
         }
-    })
+    });
     connection.query(sql, function (err, rs) {
         if (err) {
             console.log('err');
@@ -270,7 +271,7 @@ app.get('/hall.html/add', function (req, res) {
 
         }
     })
-})
+});
 
 
 app.post('/login', function (req, res) {
@@ -295,7 +296,7 @@ app.post('/login', function (req, res) {
         }
 
     })
-})
+});
 app.get('/logout', function (req, res) {
     delete req.session.id;
     delete req.session.userName; // 删除session
@@ -304,4 +305,4 @@ app.get('/logout', function (req, res) {
 
 var server = http.createServer(app).listen(8888, function () {
     console.log("start");
-})
+});
