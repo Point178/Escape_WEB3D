@@ -63,10 +63,9 @@ function User(params) {
         });
 
         user = loadedObject;
-        user.position = lastLocation;
-        user.position.y = lastLocation[1];
-        user.position.x = lastLocation[0];
-        user.position.z = lastLocation[2];
+        user.position.y = 10;
+        user.position.x = 0;
+        user.position.z = 350;
         //user.rotation.y = -1 * Math.PI;
         user.scale.set(1.2,1.2,1.2);
         self.user = user;
@@ -77,16 +76,16 @@ function User(params) {
         params.scene.add(skeleton);
         mixer = loadedObject.mixer = new THREE.AnimationMixer(loadedObject);
         //mixer.timeScale = 1.25;
-        console.log(loadedObject);
         let actions = [];
         for(var i=0; i<loadedObject.animations.length; i++){
             actions[i] = mixer.clipAction(loadedObject.animations[i]);
         }
         self.actions = actions;
         self.mixer = mixer;
-        console.log(loadedObject)
-    },function () {
+        console.log(loadedObject);
         params.cb();
+    },function () {
+        console.log("success");
     }, function () {
         console.log("error");
     });

@@ -16,21 +16,29 @@ module.exports = function () {
     let controlsEnabled = false;
     let pitchObject, yawObject;
     let pickObject = []; // 0-book; 1-key; 2-lock; 3-candle, 4-basement_door;
-    let basement_pass = false;
 
-    var argsIndex = url.split("?name=");
+    /*var argsIndex = url.split("?name=");
     var arg = argsIndex[1];
     argsIndex = arg.split("&user=");
-    var roomName=argsIndex[0];
-    arg=argsIndex[1];
+    var roomName = argsIndex[0];
+    arg = argsIndex[1];
     argsIndex = arg.split("&gender=");
     var userName = argsIndex[0];
     var gender = argsIndex[1];
     const io = require('socket.io-client');
-    var socket = io('http://127.0.0.1:3000');
+    var socket = io('http://127.0.0.1:3000');*/
+    var userName = "point178";
+    var roomName = "aa";
+    var gender = 0;
 
     let players = [];
     let isKey = false;
+    let isCandle = false;
+    let code_pass = false;
+
+    let isFloatDisplay;
+    let isChatDisplay;
+    let t;
 
     function initScene() {
         scene = new THREE.Scene();
@@ -83,6 +91,29 @@ module.exports = function () {
                 user.speed = 3;
                 user.walk();
                 break;
+
+            case 9: // tab
+                if(isChatDisplay){
+                    document.getElementById("chat").style.display = "none";
+                    isChatDisplay = false;
+                }else {
+                    document.getElementById("chat").style.display = "block";
+                    isChatDisplay = true;
+                    if(isFloatDisplay){
+                        window.clearTimeout(t);
+                    }
+                }
+                break;
+
+            case 13://enter
+                console.log("enter");
+                if(document.getElementById("message").value.length > 0){
+                    addMsg(userName, document.getElementById("message").value);
+                    //socket.emit('chat', document.getElementById("message").innerText);
+                    console.log(document.getElementById("message").value);
+                    document.getElementById("message").value = "";
+                }
+                break;
         }
     });
 
@@ -130,15 +161,16 @@ module.exports = function () {
     }
 
     function start() {
-            //join the room
-            var joinData={
-                room:roomName,
-                user:userName,
-                gender:gender,
-                position:[user.user.position.x, user.user.position.y, user.user.position.z],
-                rotation:[user.user.rotation.x, user.user.rotation.y, user.user.rotation.z]
-            };
-            socket.emit('join',joinData);
+        //join the room
+        var joinData = {
+            room: roomName,
+            user: userName,
+            gender: gender,
+            position: [user.user.position.x, user.user.position.y, user.user.position.z],
+            rotation: [user.user.rotation.x, user.user.rotation.y, user.user.rotation.z]
+        };
+        console.log(joinData);
+        //socket.emit('join', joinData);
         container.addEventListener('mousemove', function (event) {
             let movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
             let movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
@@ -148,44 +180,44 @@ module.exports = function () {
         });
 
         container.addEventListener('mousedown', function (e) {
-                e.preventDefault();
+            e.preventDefault();
 
-                let mouse = new THREE.Vector2();
-                mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-                mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-                let pickRay = new THREE.Raycaster();
-                pickRay.setFromCamera(mouse, camera);
-                let number = -1;
-                for (let i = 0; i < 4; i++) {
-                    let hit = pickRay.intersectObject(pickObject[i], true);
-                    if (hit.length > 0) {
-                        number = i;
-                        break;
-                    }
+            let mouse = new THREE.Vector2();
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            let pickRay = new THREE.Raycaster();
+            pickRay.setFromCamera(mouse, camera);
+            let number = -1;
+            for (let i = 0; i < 4; i++) {
+                let hit = pickRay.intersectObject(pickObject[i], true);
+                if (hit.length > 0) {
+                    number = i;
+                    break;
                 }
+            }
+            if (controlsEnabled === true && isStart) {
                 switch (number) {
                     // 0-book; 1-key; 2-lock; 3-candle;
                     case 0:
-                        if (controlsEnabled === true && isStart) {
-                            showDiary();
-                        }
+                        showDiary();
                         break;
                     case 1:
-                        if (controlsEnabled === true && isStart) {
-                            //pickupKey();
-                            socket.emit('key', userName);
-                        }
+                        socket.emit('key', userName);
                         break;
                     case 2:
-                        if (controlsEnabled === true && isStart) {
-                            inputCode();
-                        }
+                        inputCode();
                         break;
                     case 3:
-                        //TODO
+                        socket.emit('candle', userName);
+                        break;
+                    case 4:
+                        if (isKey) {
+                            socket.emit('door', userName);
+                        }
                         break;
                 }
-            });
+            }
+        });
 
         animate();
     }
@@ -198,9 +230,9 @@ module.exports = function () {
 
             var updateData = {
                 position: [user.user.position.x, user.user.position.y, user.user.position.z],
-                rotation:[user.user.rotation.x, user.user.rotation.y, user.user.rotation.z]
+                rotation: [user.user.rotation.x, user.user.rotation.y, user.user.rotation.z]
             };
-            socket.emit('update', updateData);
+            //socket.emit('update', updateData);
         }
         requestAnimationFrame(animate);
     }
@@ -208,8 +240,8 @@ module.exports = function () {
     function load() {
         user = new User({
             scene: scene,
-            username:userName,
-            gender:gender,
+            username: userName,
+            gender: gender,
             cb: start,
         });
     }
@@ -217,31 +249,51 @@ module.exports = function () {
     function inputCode() {
         document.getElementById("bg").style.display = "block";
         document.getElementById("inputCodeBox").style.display = "block";
+        if (code_pass) {
+            document.getElementById("confirm").innerText = "Opened";
+            document.getElementById("code1").value = 1;
+            document.getElementById("code2").value = 7;
+            document.getElementById("code3").value = 8;
+            document.getElementById("code4").value = 3;
+        }
     }
 
     function showDiary() {
         document.getElementById("bg").style.display = "block";
         document.getElementById("diaryBox").style.display = "block";
+        if (isCandle) {
+            document.getElementById("diary").src = "/image/model/diary.jpg";
+        } else {
+            document.getElementById("diary").src = "/image/model/empty.jpg";
+        }
     }
 
     function pickupKey() {
-        //pickObject[1].position.x = user.user.children[3].position.x;
-        //pickObject[1].position.y = 150;
-        //pickObject[1].position.z = user.user.children[3].position.z;
-        //pickObject[1].scale.set(0.02, 0.02, 0.02);
-        //user.user.add(pickObject[1]);
         scene.remove(pickObject[1]);
     }
 
+    function pickupCandle(){
+        scene.remove(pickObject[3]);
+    }
+
+    function addMsg(name, content){
+        var oDiv = document.createElement('div');
+        oDiv.innerHTML = name + ": " + content;
+        oDiv.setAttribute("class", "d-flex p-2 float-left rounded oDiv");
+        var father = document.getElementById("content");
+        father.appendChild(oDiv);
+        father.scrollTop = father.scrollHeight;
+    }
+
     document.getElementById("confirm").onclick = function () {
-        if (!basement_pass) {
+        if (!code_pass) {
             let code1 = document.getElementById("code1").value;
             let code2 = document.getElementById("code2").value;
             let code3 = document.getElementById("code3").value;
             let code4 = document.getElementById("code4").value;
-            if (code1 === "0" && code2 === "0" && code3 === "0" && code4 === "0") {
+            if (code1 === "1" && code2 === "7" && code3 === "8" && code4 === "3") {
                 //开门
-                socket.emit('door', 'basement');
+                //socket.emit('code', username);
             }
         }
         document.getElementById("bg").style.display = "none";
@@ -256,7 +308,7 @@ module.exports = function () {
     window.onload = function () {
         instructions.addEventListener('click', function (event) {
             instructions.style.display = 'none';
-            document.getElementById("waiting").style.display='block';
+            document.getElementById("waiting").style.display = 'block';
             controlsEnabled = true;
         }, false);
         draw();
@@ -266,73 +318,115 @@ module.exports = function () {
             pick: pickObject,
             cb: load
         });
+        document.getElementById("inputGroup-sizing-default").innerText = userName;
     };
 
-    socket.on('start',(data)=>{
-        if(data === 'true'){
-            isStart = true;
-            document.getElementById("waiting").style.display='none';
+    function showMessage(name, content){
+        if(!isChatDisplay) {
+            if(isFloatDisplay){
+                window.clearTimeout(t);
+            }
+            document.getElementById("chat_float").innerText = name + ": " + content;
+            document.getElementById("chat_float").setAttribute("class", "d-inline-flex p-2 float-left rounded visible");
+            t = window.setTimeout("document.getElementById('chat_float').setAttribute('class', 'd-inline-flex p-2 float-left rounded invisible');", 3000);
         }
-    })
+    }
+/*
+    socket.on('start', (data) => {
+        if (data === 'true') {
+            isStart = true;
+            document.getElementById("waiting").style.display = 'none';
+            showMessage("SYSTEM", "Start game!");
+            addMsg("SYSTEM", "Start game!");
+        }
+    });
 
-    socket.on('connect', (data) =>{
+    socket.on('connect', (data) => {
+        var obj = data.parseJSON();
         var player = new User({
-            scene:scene,
-            username:data.user,
-            gender:data.gender
+            scene: scene,
+            username: obj.user,
+            gender: obj.gender
         });
         players.add(player);
-        player.setLocation(data.position, data.rotation);
+        player.setLocation(obj.position, obj.rotation);
+        showMessage("SYSTEM", "Player " + obj.user +" enters the room!");
+        addMsg("SYSTEM", "Player " + obj.user +" enters the room!");
     });
 
-    socket.on('update', (data)=>{
-       var i = 0;
-       while(i < players.length){
-           if(players[i].username === data.user){
-               players[i].setLocation(data.position, data.rotation);
-               break;
-           }
-           i++;
-       }
-    });
-
-    socket.on('disconnection', (data)=>{
+    socket.on('update', (data) => {
         var i = 0;
-        while(i < players.length){
-            if(players[i].username === data.user){
+        var obj = data.parseJSON();
+        while (i < players.length) {
+            if (players[i].username === obj.user) {
+                players[i].setLocation(obj.position, obj.rotation);
+                break;
+            }
+            i++;
+        }
+    });
+
+    socket.on('disconnection', (data) => {
+        var i = 0;
+        while (i < players.length) {
+            if (players[i].username === data) {
                 // TODO system message
+                showMessage("SYSTEM", "Player " + data +" leaves the room!");
+                addMsg("SYSTEM", "Player " + data +" leaves the room!");
+                scene.remove(players[i].user);
                 players.remove(players[i]);
             }
         }
     });
 
-    socket.on('door', (data)=>{
-        if(data === 'basement'){
-            new TWEEN.Tween(pickObject[4].rotation).to({
-                z: Math.PI / 2
-            }, 2000).easing(TWEEN.Easing.Elastic.Out).start();
+    socket.on('win', (data) => {
+        new TWEEN.Tween(pickObject[4].rotation).to({
+            z: Math.PI / 2
+        }, 2000).easing(TWEEN.Easing.Elastic.Out).start();
 
-            basement_pass = true;
-        }else{
-            //Todo
+        var score = [];
+        for (var i = 0; i < players.length; i++) {
+            score.add(data.get(players[i].username));
         }
+
+        //TODO display as message
     });
 
-    socket.on('key', (data)=>{
+    socket.on('hint', (data) =>{
+        //TODO
+        showMessage("SYSTEM", data);
+        addMsg("SYSTEM", data);
+    });
+
+    socket.on('key', (data) => {
         pickupKey();
-        var name = data;
-        if(data === userName){
+        if (data === userName) {
             //Todo
             isKey = true;
-        }else{
+        } else {
             //Todo
-
         }
+        showMessage("SYSTEM", "Player " + data +" finds a key!");
+        addMsg("SYSTEM", "Player " + data +" finds a key!");
     });
 
-    socket.on('chat',(data)=>{
-        var name= data.user;
+    socket.on('chat', (data) => {
+        var name = data.user;
         var content = data.content;
         //Todo
-    })
+        showMessage(name, content);
+        addMsg(name, content);
+    });
+
+    socket.on('candle', (data) =>{
+        pickupCandle();
+        if (data === userName) {
+            //Todo
+            isCandle = true;
+        } else {
+            //Todo
+        }
+        showMessage("SYSTEM", "Player " + data +" finds a candle!");
+        addMsg("SYSTEM", "Player " + data +" finds a candle!");
+    })*/
 };

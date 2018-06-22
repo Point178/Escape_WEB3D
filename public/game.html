@@ -20,28 +20,41 @@
     <div id="instructions">
         <span style="font-size:40px">Click to ready</span>
         <br/>
-        (W, A, S, D = Move, CLICK = Pick up object, MOUSE = Look around, Q = quit)
+        (W, A, S, D = Move, CLICK = Pick up object, MOUSE = Look around, Tab = Chat)
     </div>
-    <div id="waiting"><span>Waiting......</span></div>
+    <div id="waiting" class="alert alert-dark" role="alert"><span>Waiting for other players......</span></div>
     <div id="packet"></div>
-    <div id="chat_float"></div>
-    <div id="chat"></div>
+</div>
+
+<div id="chat_float" class="d-inline-flex p-2 float-left rounded invisible"></div>
+
+<div id="chat">
+    <div id="content">
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default"></span>
+        </div>
+        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="message">
+    </div>
 </div>
 
 <div id="contain_div">
     <div id="bg"></div>
     <div id="inputCodeBox">
-        <input type="number" min="0" max="9" id="code1" value="0"/>
-        <input type="number" min="0" max="9" id="code2" value="0"/>
-        <input type="number" min="0" max="9" id="code3" value="0"/>
-        <input type="number" min="0" max="9" id="code4" value="0"/>
+        <input type="number" min="0" max="9" id="code1" value="1"/>
+        <input type="number" min="0" max="9" id="code2" value="7"/>
+        <input type="number" min="0" max="9" id="code3" value="8"/>
+        <input type="number" min="0" max="9" id="code4" value="3"/>
         <br>
         <br>
         <button id="confirm">OPEN</button>
     </div>
     <div id="diaryBox">
-        <img src="/image/model/diary.jpg" alt="diary">
-        <button id="close">CLOSE</button>
+        <img id="diary" alt="diary">
+        <button type="button" class="close" aria-label="Close" id="close">
+            <span aria-hidden="true"></span>
+        </button>
     </div>
 </div>
 <script src="game_bundle.js"></script>

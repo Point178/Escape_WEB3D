@@ -3,6 +3,7 @@
  */
 //main.game
 require('./game.css');
+require('./bootstrap.min.css');
 
 const animation = require('./animation.js');
 animation();
