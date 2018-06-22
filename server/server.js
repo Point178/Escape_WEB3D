@@ -15,31 +15,31 @@ var con = mysql.createConnection({
 con.connect();
 server.listen(3000);
 var map = {};
-io.sockets.on('connection', function (socket) {
-    console.log("new connection");
+//io.sockets.on('connection', function (socket) {
+  io.on('connection', function(socket) {
+      console.log("A user connected!");
 
-    socket.on('room', (data) => {
-        console.log("a room:");
-        var roomId = data.room;
-        console.log("roomID:"+roomId);
-        socket.join(roomId);
-        map[roomId]={
-            isKey:true,
-            isCandle:true,
-            keyUser: null,
-            candleUser:null,
-            hintUser:null,
-            codeUser:null,
-            isStart:false,
-            isCode:false
-        };
-    });
+      socket.on('room', function(data){
+          console.log("a room:");
+          var roomId = data.room;
+          console.log("roomID:" + roomId);
+          //socket.join(roomId);
+          map[roomId] = {
+              isKey: true,
+              isCandle: true,
+              keyUser: null,
+              candleUser: null,
+              hintUser: null,
+              codeUser: null,
+              isStart: false,
+              isCode: false
+          };
+      });
 
-    socket.on('join', (data) => {
-
+      socket.on('join', function(data){
+        console.log(data);
         var roomid = data.room;
         var username = data.user;
-        console.log("a new player");
         socket.join(data.room);
         var m = map[roomid];
 
@@ -50,7 +50,7 @@ io.sockets.on('connection', function (socket) {
             rotation:data.rotation
         };
         var score = 0;
-        io.sockets.in(data.room).emit('connect',joindata);
+        socket.broadcast.to(data.room).emit('connection', joindata);
 
         var user;
         var user2;
@@ -67,9 +67,9 @@ io.sockets.on('connection', function (socket) {
                 console.log('err');
             }else{
                 number = rs[0].num;
-                if(number==3 && m.isStart==false){
+                if(number===3 && m.isStart===false){
                     m.isStart = true;
-                    io.sockets.in(data.room).emit('start',m.isStart);
+                    socket.broadcast.to(data.room).emit('start',m.isStart);
                 }
             }
         });
@@ -81,38 +81,38 @@ io.sockets.on('connection', function (socket) {
                 rotation: data.rotation,
                 username: data.user
             };
-            io.sockets.in(roomid).emit('update',updatedata);
+            socket.broadcast.to(roomid).emit('update',updatedata);
         });
        
        
         socket.on('key',(data)=>{
-            if(m.isKey == true && m.keyUser == null){
+            if(m.isKey === true && m.keyUser == null){
                m.isKey = false;
                m.keyUser = data;
-               if(m.keyUser == username) {
+               if(m.keyUser === username) {
                    score = score + 10;
                }
-               io.sockets.in(roomid).emit('key',m.keyUser);
+               socket.broadcast.to(roomid).emit('key',m.keyUser);
             }
         });
 
 
         socket.on('candle',(data)=>{
-            if(m.isCandle == true && m.candleUser == null){
+            if(m.isCandle === true && m.candleUser == null){
                 m.isCandle = false;
                 m.candleUser = data;
-                if(m.candleUser == username) {
+                if(m.candleUser === username) {
                     score = score + 10;
                 }
-               io.sockets.in(roomid).emit('candle',m.candleUser);
+               socket.broadcast.to(roomid).emit('candle',m.candleUser);
             }
         });
 
         socket.on('code',(data)=>{
-            if(m.codeUser == null && m.isCode == false){
+            if(m.codeUser == null && m.isCode === false){
                 m.codeUser = data;
                 m.isCode = true;
-                if(m.codeUser == username) {
+                if(m.codeUser === username) {
                     score = score + 10;
                 }
             }
@@ -124,26 +124,26 @@ io.sockets.on('connection', function (socket) {
                 user: data.user,
                 content: data.content
             };
-            if(data.content=="compliance will be rewarded"){
+            if(data.content==="compliance will be rewarded"){
                 io.sockets.in(roomid).emit('hint',"Code is 1783");
                 if(m.hintUser == null){
                     m.hintUser = data.user;
-                    if(m.hintUser == username) {
+                    if(m.hintUser === username) {
                         score = score + 10;
                     }
                 }
             }
-            io.sockets.in(roomid).emit('chat',chatdata);
+            socket.broadcast.to(roomid).emit('chat',chatdata);
         });
 
         socket.on('door',(data)=>{
-            if(m.isCode == true){
-               if(data == m.keyUser){
+            if(m.isCode === true){
+               if(data === m.keyUser){
                   var windata={
                       user:username,
                       score:score
                   };
-                io.sockets.in(roomid).emit('win',windata.user+":"+ windata.score);
+                socket.broadcast.to(roomid).emit('win',windata.user+":"+ windata.score);
                }
             }
         });
@@ -187,7 +187,7 @@ io.sockets.on('connection', function (socket) {
                             });
                             break;
                     }
-                    if (number==1) {
+                    if (number===1) {
                         con.query(deleteSQl, function (err){
                             if (err) {
                                 console.log('err');
@@ -198,7 +198,7 @@ io.sockets.on('connection', function (socket) {
                 }
             });
             console.log("与服务器断开");
-            io.sockets.in(data.room).emit('disconnection',data.user);
+            socket.broadcast.to(data.room).emit('disconnection',data.user);
             
         });//包括自己
     });

@@ -63,9 +63,12 @@ function User(params) {
         });
 
         user = loadedObject;
-        user.position.y = 10;
-        user.position.x = 0;
-        user.position.z = 350;
+        user.position.y = params.position[1];
+        user.position.x = params.position[0];
+        user.position.z = params.position[2];
+        user.rotation.x = params.rotation[0];
+        user.rotation.y = params.rotation[1];
+        user.rotation.z = params.rotation[2];
         //user.rotation.y = -1 * Math.PI;
         user.scale.set(1.2,1.2,1.2);
         self.user = user;
@@ -83,7 +86,14 @@ function User(params) {
         self.actions = actions;
         self.mixer = mixer;
         console.log(loadedObject);
-        params.cb();
+        //if(params.objects !== ""){
+        //    params.objects.push(this);
+        //    params.players.push(this);
+        //}
+
+        if(params.cb !== "") {
+            params.cb();
+        }
     },function () {
         console.log("success");
     }, function () {
@@ -197,7 +207,7 @@ User.prototype.setLocation = function(position, rotation){
     this.user.rotation.x = rotation[0];
     this.user.rotation.y = rotation[1];
     this.user.rotation.z = rotation[2];
-}
+};
 
 
 module.exports = User;

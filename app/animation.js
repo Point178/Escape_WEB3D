@@ -17,6 +17,7 @@ module.exports = function () {
     let pitchObject, yawObject;
     let pickObject = []; // 0-book; 1-key; 2-lock; 3-candle, 4-basement_door;
 
+    var url = decodeURI(window.location.href);
     var argsIndex = url.split("?name=");
     var arg = argsIndex[1];
     argsIndex = arg.split("&user=");
@@ -26,7 +27,7 @@ module.exports = function () {
     var userName = argsIndex[0];
     var gender = argsIndex[1];
     const io = require('socket.io-client');
-    var socket = io('http://127.0.0.1:3000');
+    var socket = io('http://127.0.0.1:3000/');
 
     let players = [];
     let isKey = false;
@@ -239,6 +240,9 @@ module.exports = function () {
             scene: scene,
             username: userName,
             gender: gender,
+            position:[0, 10, 350],
+            rotation:[0,0,0],
+            objects:"",
             cb: start,
         });
     }
@@ -308,14 +312,15 @@ module.exports = function () {
             document.getElementById("waiting").style.display = 'block';
             document.getElementById("packet").style.display = 'block';
             controlsEnabled = true;
+
+            basement = new Basement({
+                scene: scene,
+                objects: objects,
+                pick: pickObject,
+                cb: load
+            });
         }, false);
         draw();
-        basement = new Basement({
-            scene: scene,
-            objects: objects,
-            pick: pickObject,
-            cb: load
-        });
         document.getElementById("inputGroup-sizing-default").innerText = userName;
     };
 
@@ -339,22 +344,25 @@ module.exports = function () {
         }
     });
 
-    socket.on('connect', (data) => {
-        var obj = data.parseJSON();
+    socket.on('connection', (obj) => {
         var player = new User({
             scene: scene,
             username: obj.user,
-            gender: obj.gender
+            gender: obj.gender,
+            position:obj.position,
+            rotation:obj.rotation,
+            //players: players,
+            objects: objects,
+            cb: ""
         });
-        players.add(player);
-        player.setLocation(obj.position, obj.rotation);
+        players.push(player);
+        objects.push(player);
         showMessage("SYSTEM", "Player " + obj.user +" enters the room!");
         addMsg("SYSTEM", "Player " + obj.user +" enters the room!");
     });
 
-    socket.on('update', (data) => {
+    socket.on('update', (obj) => {
         var i = 0;
-        var obj = data.parseJSON();
         while (i < players.length) {
             if (players[i].username === obj.user) {
                 players[i].setLocation(obj.position, obj.rotation);
