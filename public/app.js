@@ -54,10 +54,15 @@ app.get('/register', function (req, res) {
         if (err) {
             console.log('fail');
             res.redirect(301, 'http://localhost:8888/register.html?state=fail');
-        }
-        else {
+        }else {
+            if (rs.length == 0) {
+                console.log('fail');
+                res.redirect(301, 'http://localhost:8888/register.html?state=fail');
+            }
+            else {
             console.log('ok');
             res.redirect(301, 'http://localhost:8888/chooseCharacter.html?name=' + name);
+            }
         }
 
     })
