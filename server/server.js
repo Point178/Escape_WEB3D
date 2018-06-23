@@ -15,6 +15,7 @@ var con = mysql.createConnection({
 con.connect();
 server.listen(3000);
 var map = {};
+var gameuser = {};
 //io.sockets.on('connection', function (socket) {
   io.on('connection', function(socket) {
       console.log("A user connected!");
@@ -34,6 +35,7 @@ var map = {};
               isStart: false,
               isCode: false
           };
+          gameuser[roomId] = {};
       });
 
       socket.on('join', function(data){
@@ -42,15 +44,22 @@ var map = {};
         var username = data.user;
         socket.join(data.room);
         var m = map[roomid];
-
+        var g = gameuser[roomid];
         var joindata = {
             user: data.user,
             gender: data.gender,
             position: data.position,
             rotation:data.rotation
         };
+        g[username] = joindata;
         var score = 0;
         socket.broadcast.to(data.room).emit('connection', joindata);
+        for(var k in g){
+            if(k !== username){
+                socket.emit('connection', g[k]);
+            }
+        }
+
 
         var user;
         var user2;
@@ -81,6 +90,10 @@ var map = {};
                 rotation: data.rotation,
                 username: data.user
             };
+            if(m.isStart === false){
+                g[data.user].position = data.position;
+                g[data.user].rotation = data.rotation;
+            }
             socket.broadcast.to(roomid).emit('update',updatedata);
         });
        
