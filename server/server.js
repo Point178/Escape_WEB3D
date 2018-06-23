@@ -43,20 +43,20 @@ var gameuser = {};
         var roomid = data.room;
         var username = data.user;
         socket.join(data.room);
-        var m = map[roomid];
-        var g = gameuser[roomid];
+        //map[roomid];
+        //var g = gameuser[roomid];
         var joindata = {
             user: data.user,
             gender: data.gender,
             position: data.position,
             rotation:data.rotation
         };
-        g[username] = joindata;
+        gameuser[roomid][username] = joindata;
         var score = 0;
         socket.broadcast.to(data.room).emit('connection', joindata);
         for(var k in g){
             if(k !== username){
-                socket.emit('connection', g[k]);
+                socket.emit('connection', gameuser[roomid][k]);
             }
         }
 
@@ -76,9 +76,9 @@ var gameuser = {};
                 console.log('err');
             }else{
                 number = rs[0].num;
-                if(number===3 && m.isStart===false){
-                    m.isStart = true;
-                    socket.broadcast.to(data.room).emit('start',m.isStart);
+                if(number===3 && map[roomid].isStart===false){
+                    map[roomid].isStart = true;
+                    socket.broadcast.to(data.room).emit('start',map[roomid].isStart);
                 }
             }
         });
@@ -90,42 +90,42 @@ var gameuser = {};
                 rotation: data.rotation,
                 username: data.user
             };
-            if(m.isStart === false){
-                g[data.user].position = data.position;
-                g[data.user].rotation = data.rotation;
+            if(map[roomid].isStart === false){
+                gameuser[roomid][data.user].position = data.position;
+                gameuser[roomid][data.user].rotation = data.rotation;
             }
             socket.broadcast.to(roomid).emit('update',updatedata);
         });
        
        
         socket.on('key',(data)=>{
-            if(m.isKey === true && m.keyUser == null){
-               m.isKey = false;
-               m.keyUser = data;
-               if(m.keyUser === username) {
+            if(map[roomid].isKey === true && map[roomid].keyUser == null){
+                map[roomid].isKey = false;
+                map[roomid].keyUser = data;
+               if(map[roomid].keyUser === username) {
                    score = score + 10;
                }
-               socket.broadcast.to(roomid).emit('key',m.keyUser);
+               socket.broadcast.to(roomid).emit('key',map[roomid].keyUser);
             }
         });
 
 
         socket.on('candle',(data)=>{
-            if(m.isCandle === true && m.candleUser == null){
-                m.isCandle = false;
-                m.candleUser = data;
-                if(m.candleUser === username) {
+            if(map[roomid].isCandle === true && map[roomid].candleUser == null){
+                map[roomid].isCandle = false;
+                map[roomid].candleUser = data;
+                if(map[roomid].candleUser === username) {
                     score = score + 10;
                 }
-               socket.broadcast.to(roomid).emit('candle',m.candleUser);
+               socket.broadcast.to(roomid).emit('candle',map[roomid].candleUser);
             }
         });
 
         socket.on('code',(data)=>{
-            if(m.codeUser == null && m.isCode === false){
-                m.codeUser = data;
-                m.isCode = true;
-                if(m.codeUser === username) {
+            if(map[roomid].codeUser == null && map[roomid].isCode === false){
+                map[roomid].codeUser = data;
+                map[roomid].isCode = true;
+                if(map[roomid].codeUser === username) {
                     score = score + 10;
                 }
             }
@@ -139,9 +139,9 @@ var gameuser = {};
             };
             if(data.content==="compliance will be rewarded"){
                 io.sockets.in(roomid).emit('hint',"Code is 1783");
-                if(m.hintUser == null){
-                    m.hintUser = data.user;
-                    if(m.hintUser === username) {
+                if(map[roomid].hintUser == null){
+                    map[roomid].hintUser = data.user;
+                    if(map[roomid].hintUser === username) {
                         score = score + 10;
                     }
                 }
@@ -150,8 +150,8 @@ var gameuser = {};
         });
 
         socket.on('door',(data)=>{
-            if(m.isCode === true){
-               if(data === m.keyUser){
+            if(map[roomid].isCode === true){
+               if(data === map[roomid].keyUser){
                   var windata={
                       user:username,
                       score:score
@@ -178,6 +178,7 @@ var gameuser = {};
                                     console.log('err');
                                 }else{
                                     socket.leave(data.room);
+                                    delete gameuser[roomid][data.user];
                                 }
                             });
                             break;
@@ -187,6 +188,7 @@ var gameuser = {};
                                     console.log('err');
                                 }else{
                                     socket.leave(data.room);
+                                    delete gameuser[roomid][data.user];
                                     }
                             });
                             break;
@@ -196,6 +198,7 @@ var gameuser = {};
                                     console.log('err');
                                 }else{
                                     socket.leave(data.room);
+                                    delete gameuser[roomid][data.user];
                                 }
                             });
                             break;
@@ -204,6 +207,8 @@ var gameuser = {};
                         con.query(deleteSQl, function (err){
                             if (err) {
                                 console.log('err');
+                                delete gameuser[roomid];
+                                delete map[roomid];
                             }
                         });
                     }
