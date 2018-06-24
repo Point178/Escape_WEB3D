@@ -1,10 +1,6 @@
 /**
  * Created by 昕点陈 on 2018/6/9.
  */
-/**
- Created by 何当当 on 2018/6/13
- */
-
 module.exports = function () {
     let isStart = false;
     let User = require("./user");
@@ -243,7 +239,7 @@ module.exports = function () {
             position:[0, 10, 350],
             rotation:[0,0,0],
             objects:"",
-            cb: start,
+            cb: start
         });
     }
 
@@ -356,7 +352,7 @@ module.exports = function () {
             cb: ""
         });
         players.push(player);
-        objects.push(player);
+        objects.push(player.user);
         showMessage("SYSTEM", "Player " + obj.user +" enters the room!");
         addMsg("SYSTEM", "Player " + obj.user +" enters the room!");
     });
