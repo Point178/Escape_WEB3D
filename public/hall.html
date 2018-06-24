@@ -42,9 +42,9 @@
                     function (msg) {
                         var data=msg.data;
                         for(var i = 0; i < data.length; i++) {
-                            var id = data[i].id;
-                            var number=data[i].num;
-                            var status=data[i].status;
+                            var id = data[i][0];
+                            var number=data[i][1];
+                            var status=data[i][2];
                             var sta;
                             if (status==0) {
                                 sta="准备中";

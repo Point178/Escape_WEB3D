@@ -29,6 +29,8 @@
     "express-session": "^1.15.6",
     "file-loader": "^1.1.11",
     "mysql": "^2.15.0",
+    "neo4j": "^2.0.0-RC2",
+    "node-neo4j": "^2.0.3",
     "socket.io": "^2.1.1",
     "src": "^1.1.2",
     "three": "^0.93.0",
