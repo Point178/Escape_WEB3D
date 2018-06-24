@@ -197,7 +197,8 @@ io.on('connection', function (socket) {
                         user=strs[0];
                         user2=strs[1];
                         user3=strs[2];
-                        number=strs[3];
+                        number=parseInt(strs[3]);
+                        var newNum=number-1;
                         //console.log('user:'+strs[0]);
                         //console.log('user2'+strs[1]);
                         //console.log('user3'+strs[2]);
@@ -206,28 +207,31 @@ io.on('connection', function (socket) {
                         switch (data.user) {
                             case user:
                                 db.cypherQuery(
-                                    'match(room:Room) where room.id={id} set room.user1=null,num={num}',
+                                    'match(room:Room) where room.id={id} set room.user1=null,room.num={num}',
                                     {
                                         id:roomid,
-                                        num:number-1
+                                        num:newNum
                                     },
                                     function (err1) {
                                         if (err1) {
                                             console.log("err1");
+                                            console.log(err1);
+
                                         }
                                         else {
                                             socket.leave(data.room);
-                                            delete gameuser[roomid][data.user];
+                                            if (gameuser[roomid]!=null)
+                                                delete gameuser[roomid][data.user];
                                         }
                                     }
                                 );
                                 break;
                             case user2:
                                 db.cypherQuery(
-                                    'match(room:Room) where room.id={id} set room.user2=null,num={num}',
+                                    'match(room:Room) where room.id={id} set room.user2=null,room.num={num}',
                                     {
                                         id:roomid,
-                                        num:number-1
+                                        num:newNum
                                     },
                                     function (err2) {
                                         if (err2) {
@@ -235,17 +239,18 @@ io.on('connection', function (socket) {
                                         }
                                         else {
                                             socket.leave(data.room);
-                                            delete gameuser[roomid][data.user];
+                                            if (gameuser[roomid]!=null)
+                                                delete gameuser[roomid][data.user];
                                         }
                                     }
                                 );
                                 break;
                             case user3:
                                 db.cypherQuery(
-                                    'match(room:Room) where room.id={id} set room.user3=null,num={num}',
+                                    'match(room:Room) where room.id={id} set room.user3=null,room.num={num}',
                                     {
                                         id:roomid,
-                                        num:number-1
+                                        num:newNum
 
                                     },
                                     function (err3) {
@@ -254,7 +259,8 @@ io.on('connection', function (socket) {
                                         }
                                         else {
                                             socket.leave(data.room);
-                                            delete gameuser[roomid][data.user];
+                                            if (gameuser[roomid]!=null)
+                                                delete gameuser[roomid][data.user];
                                         }
                                     }
                                 );
