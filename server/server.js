@@ -84,9 +84,10 @@ io.on('connection', function (socket) {
                     console.log("err");
                 } else {
                     number = rs.data[0];
-                    if(number===3 && map[roomid].isStart===false){
+                    if(number==3 && map[roomid].isStart===false){
                         map[roomid].isStart = true;
-                        socket.broadcast.to(data.room).emit('start',map[roomid].isStart);
+                        io.to(data.room).emit('start',map[roomid].isStart);
+                        //socket.broadcast.to(data.room).emit('start',map[roomid].isStart);
                     }
                 }
             }
@@ -122,10 +123,11 @@ io.on('connection', function (socket) {
             if (map[roomid].isKey === true && map[roomid].keyUser == null) {
                 map[roomid].isKey = false;
                 map[roomid].keyUser = data;
+                console.log("key:"+map[roomid].keyUser);
                 if (map[roomid].keyUser === username) {
                     score = score + 10;
                 }
-                socket.broadcast.to(roomid).emit('key', map[roomid].keyUser);
+                io.to(roomid).emit('key', map[roomid].keyUser);
             }
         });
 
@@ -137,7 +139,7 @@ io.on('connection', function (socket) {
                 if (map[roomid].candleUser === username) {
                     score = score + 10;
                 }
-                socket.broadcast.to(roomid).emit('candle', map[roomid].candleUser);
+                io.to(roomid).emit('candle', map[roomid].candleUser);
             }
         });
 
@@ -176,7 +178,7 @@ io.on('connection', function (socket) {
                         user: username,
                         score: score
                     };
-                    socket.broadcast.to(roomid).emit('win', windata.user + ":" + windata.score);
+                    io.to(roomid).emit('win', windata.user + ":" + windata.score);
                 }
             }
         });
@@ -193,6 +195,7 @@ io.on('connection', function (socket) {
                         console.log("err");
                     } else {
                         var str=rs.data[0];
+                        console.log("disconnect str:"+str);
                         var strs=str.toString().split(',');
                         user=strs[0];
                         user2=strs[1];

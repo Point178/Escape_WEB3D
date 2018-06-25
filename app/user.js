@@ -75,7 +75,7 @@ function User(params) {
 
         params.scene.add(user);
         this.skeleton = new THREE.SkeletonHelper(user);
-        //this.skeleton.visible = false;
+        this.skeleton.visible = false;
         params.scene.add(skeleton);
         mixer = loadedObject.mixer = new THREE.AnimationMixer(loadedObject);
         //mixer.timeScale = 1.25;
@@ -87,7 +87,7 @@ function User(params) {
         self.mixer = mixer;
         console.log(loadedObject);
         //if(params.objects !== ""){
-        //    params.objects.push(this);
+        //    params.objects.push(user);
         //    params.players.push(this);
         //}
 
@@ -147,17 +147,15 @@ function User(params) {
 
 User.prototype.walk = function(){
     //this.prepareCrossFade(this.idleAction, this.walkAction, 0,5);
-    for(let i=0; i<this.actions.length; i++){
-        this.actions[i].stop();
-    }
     this.actions[0].play();
 };
 
 User.prototype.stop = function(){
     //this.prepareCrossFade(this.walkAction, this.idleAction, 0.5);
-    for(let i=0; i<this.actions.length; i++){
-        this.actions[i].stop();
-    }
+    //for(let i=0; i<this.actions.length; i++){
+    //    this.actions[i].stop();
+    //}
+    this.actions[0].stop();
 };
 
 User.prototype.tick = function (pitchObject, yawObject, objects) {
@@ -208,6 +206,5 @@ User.prototype.setLocation = function(position, rotation){
     this.user.rotation.y = rotation[1];
     this.user.rotation.z = rotation[2];
 };
-
 
 module.exports = User;

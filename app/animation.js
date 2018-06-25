@@ -238,7 +238,7 @@ module.exports = function () {
             gender: gender,
             position:[0, 10, 350],
             rotation:[0,0,0],
-            objects:"",
+            //objects:"",
             cb: start
         });
     }
@@ -266,11 +266,11 @@ module.exports = function () {
     }
 
     function pickupKey() {
-        scene.remove(pickObject[1]);
+        scene.splice(1,1);
     }
 
     function pickupCandle(){
-        scene.remove(pickObject[3]);
+        scene.splice(1,1);
     }
 
     function addMsg(name, content){
@@ -332,7 +332,7 @@ module.exports = function () {
     }
 
     socket.on('start', (data) => {
-        if (data === 'true') {
+        if (data === true) {
             isStart = true;
             document.getElementById("waiting").style.display = 'none';
             showMessage("SYSTEM", "Start game!");
@@ -348,20 +348,28 @@ module.exports = function () {
             position:obj.position,
             rotation:obj.rotation,
             //players: players,
-            objects: objects,
+            //objects: objects,
             cb: ""
         });
         players.push(player);
-        objects.push(player.user);
+        player.walk();
+        //objects.push(player.user);
         showMessage("SYSTEM", "Player " + obj.user +" enters the room!");
         addMsg("SYSTEM", "Player " + obj.user +" enters the room!");
     });
 
     socket.on('update', (obj) => {
         var i = 0;
+        console.log('receive update position');
         while (i < players.length) {
-            if (players[i].username === obj.user) {
-                players[i].setLocation(obj.position, obj.rotation);
+            if (players[i].username === obj.username) {
+                //if(obj.position[0] === players[i].user.position.x && obj.position[1] ===
+                //    players[i].user.position.y && obj.position[2] === players[i].user.position.z){
+                //    players[i].stop();
+                //}else {
+                    players[i].setLocation(obj.position, obj.rotation);
+                //    players[i].walk();
+                //}
                 break;
             }
             i++;
@@ -375,7 +383,7 @@ module.exports = function () {
                 showMessage("SYSTEM", "Player " + data +" leaves the room!");
                 addMsg("SYSTEM", "Player " + data +" leaves the room!");
                 scene.remove(players[i].user);
-                players.remove(players[i]);
+                players.splice(i,1);
             }
         }
     });

@@ -322,6 +322,7 @@ app.get('/hall.html/add', function (req, res) {
     var number;
     var gender;
     req.session.id = id;
+    console.log("name:"+req.session.userName);
     db.cypherQuery(
         'match(a:User) where a.name={name} return a.gender',
         {
@@ -329,6 +330,7 @@ app.get('/hall.html/add', function (req, res) {
         }, function (err, result) {
             if (err) {
                 console.log("err");
+                console.log(result.data+'\n\n');
             } else {
                 gender = result.data[0];
                 //console.log('gender:'+gender);
@@ -431,6 +433,9 @@ app.get('/hall.html/add', function (req, res) {
                                                                 if (newNumber == 3) {
                                                                     db.cypherQuery(
                                                                         'match(room:Room) where room.id={id} set room.status=1',
+                                                                        {
+                                                                            id: id
+                                                                        },
                                                                         function (err8, result8) {
                                                                             if (err8) {
                                                                                 console.log("err8");
@@ -564,7 +569,7 @@ app.post('/login', function (req, res) {
             password:pwd
         }, function (err, result) {
             if (err) {
-                console.log("err");
+                console.log("login err");
             } else {
                 if (result.data.length == 0) {
                     res.redirect(301, 'http://localhost:8888/login.html?state=fail');
