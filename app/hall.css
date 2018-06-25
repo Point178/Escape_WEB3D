@@ -14,7 +14,7 @@
 .room{
     width: 200px; /*宽*/
     height: 160px;/*高*/
-    background-image:url(/image/login_background.jpeg);/*背景图片*/
+    background-image:url(/image/room_picture.jpeg);/*房间图片*/
     background-size:cover;
     background-repeat: no-repeat;
 }

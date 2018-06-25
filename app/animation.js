@@ -182,7 +182,7 @@ module.exports = function () {
             let pickRay = new THREE.Raycaster();
             pickRay.setFromCamera(mouse, camera);
             let number = -1;
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 5; i++) {
                 let hit = pickRay.intersectObject(pickObject[i], true);
                 if (hit.length > 0) {
                     number = i;
@@ -205,7 +205,9 @@ module.exports = function () {
                         socket.emit('candle', userName);
                         break;
                     case 4:
+                        console.log('aa');
                         if (isKey) {
+                            console.log('op4n the door');
                             socket.emit('door', userName);
                         }
                         break;
@@ -290,7 +292,7 @@ module.exports = function () {
             let code4 = document.getElementById("code4").value;
             if (code1 === "1" && code2 === "7" && code3 === "8" && code4 === "3") {
                 //开门
-                socket.emit('code', username);
+                socket.emit('code', userName);
             }
         }
         document.getElementById("bg").style.display = "none";

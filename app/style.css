@@ -3,6 +3,9 @@ body.signin {
     background: #18c8f6;
     height: auto;
     background:url('/image/login_background.jpeg') no-repeat center fixed;
+    height: 100%;
+    width: 100%;
+    background-size:cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -27,7 +30,7 @@ body.signin {
 }
 
 .signinpanel form {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(128, 128, 128, 0.7);
     border: 1px solid rgba(255,255,255,.3);
     -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
     -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);

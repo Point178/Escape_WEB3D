@@ -80,10 +80,11 @@ body {
 
 #close{
     position:relative;
-    top:-570px;
-    left:-30px;
+    top:-580px;
+    left:300px;
+    border-radius: 10%;
     height:30px;
-    width:30px;
+    width:80px;
 }
 
 #bg{
