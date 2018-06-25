@@ -82,6 +82,8 @@ body {
     position:relative;
     top:-570px;
     left:-30px;
+    height:30px;
+    width:30px;
 }
 
 #bg{

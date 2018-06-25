@@ -103,7 +103,7 @@ module.exports = function () {
                 console.log("enter");
                 if(document.getElementById("message").value.length > 0){
                     addMsg(userName, document.getElementById("message").value);
-                    //socket.emit('chat', document.getElementById("message").innerText);
+                    socket.emit('chat', document.getElementById("message").value);
                     console.log(document.getElementById("message").value);
                     document.getElementById("message").value = "";
                 }
@@ -266,11 +266,11 @@ module.exports = function () {
     }
 
     function pickupKey() {
-        scene.splice(1,1);
+        scene.remove(pickObject[1]);
     }
 
     function pickupCandle(){
-        scene.splice(1,1);
+        scene.remove(pickObject[3]);
     }
 
     function addMsg(name, content){
@@ -421,6 +421,7 @@ module.exports = function () {
         var content = data.content;
         showMessage(name, content);
         addMsg(name, content);
+        console.log('receive chat message');
     });
 
     socket.on('candle', (data) =>{
@@ -431,5 +432,11 @@ module.exports = function () {
         }
         showMessage("SYSTEM", "Player " + data +" finds a candle!");
         addMsg("SYSTEM", "Player " + data +" finds a candle!");
-    })
+    });
+
+    socket.on('code', (data) =>{
+        showMessage("SYSTEM", "Player " + data +" opens the coded lock!");
+        addMsg("SYSTEM", "Player " + data +" opens the coded lock!");
+        code_pass = true;
+    });
 };

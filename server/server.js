@@ -150,24 +150,24 @@ io.on('connection', function (socket) {
                 if (map[roomid].codeUser === username) {
                     score = score + 10;
                 }
-            }
-            //io.sockets.in(roomid).emit('',data);
+                io.to(roomid).emit('code', map[roomid].codeUser);
+           }
+
         });
 
         socket.on('chat', (data) => {
             var chatdata = {
-                user: data.user,
-                content: data.content
+                user:username,
+                content:data
             };
-            if (data.content === "compliance will be rewarded") {
-                io.sockets.in(roomid).emit('hint', "Code is 1783");
+            if (data === "compliance will be rewarded" && map[roomid].isStart === true) {
+                io.to(roomid).emit('hint', "Code is 1783");
                 if (map[roomid].hintUser == null) {
-                    map[roomid].hintUser = data.user;
-                    if (map[roomid].hintUser === username) {
-                        score = score + 10;
-                    }
+                    map[roomid].hintUser = username;
+                    score = score + 10;
                 }
             }
+            console.log('receive chat message:'+ data);
             socket.broadcast.to(roomid).emit('chat', chatdata);
         });
 

@@ -147,7 +147,9 @@ function User(params) {
 
 User.prototype.walk = function(){
     //this.prepareCrossFade(this.idleAction, this.walkAction, 0,5);
-    this.actions[0].play();
+    if(this.actions.length > 0) {
+        this.actions[0].play();
+    }
 };
 
 User.prototype.stop = function(){
@@ -155,7 +157,9 @@ User.prototype.stop = function(){
     //for(let i=0; i<this.actions.length; i++){
     //    this.actions[i].stop();
     //}
-    this.actions[0].stop();
+    if(this.actions.length > 0) {
+        this.actions[0].stop();
+    }
 };
 
 User.prototype.tick = function (pitchObject, yawObject, objects) {
