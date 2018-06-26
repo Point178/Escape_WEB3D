@@ -4,22 +4,13 @@ const app = express();
 var server = require('http').createServer(app),
     io = require('socket.io').listen(server)
 
-/*var mysql = require('mysql');
-var con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '123456',
-    database: 'escape',
-    port: '3306'
-});
-con.connect();*/
 var neo4j = require('node-neo4j');
 db = new neo4j('http://neo4j:123456@localhost:7474');
 
 server.listen(3000);
 var map = {};
 var gameuser = {};
-//io.sockets.on('connection', function (socket) {
+
 io.on('connection', function (socket) {
     console.log("A user connected!");
 
@@ -46,8 +37,6 @@ io.on('connection', function (socket) {
         var roomid = data.room;
         var username = data.user;
         socket.join(data.room);
-        //map[roomid];
-        //var g = gameuser[roomid];
         var joindata = {
             user: data.user,
             gender: data.gender,
@@ -68,11 +57,6 @@ io.on('connection', function (socket) {
         var user2;
         var user3;
         var number;
-        //var sql = "select * from room where id = '" + data.room + "'";
-        /*var sql1 = "update room set user1= null, num=num-1 where id = '" + data.room + "'";
-        var sql2 = "update room set user2= null, num=num-1 where id = '" + data.room + "'";
-        var sql3 = "update room set user3= null, num=num-1 where id = '" + data.room + "'";
-        var deleteSQl = "delete from room where id = '" + data.room + "'";*/
 
         db.cypherQuery(
             'match(n:Room) where n.id={id} return n.num',
@@ -87,22 +71,10 @@ io.on('connection', function (socket) {
                     if (number == 3 && map[roomid].isStart === false) {
                         map[roomid].isStart = true;
                         io.to(data.room).emit('start', map[roomid].isStart);
-                        //socket.broadcast.to(data.room).emit('start',map[roomid].isStart);
                     }
                 }
             }
         );
-        /*con.query(sql,function(err,rs){
-            if (err) {
-                console.log('err');
-            }else{
-                number = rs[0].num;
-                if(number===3 && map[roomid].isStart===false){
-                    map[roomid].isStart = true;
-                    socket.broadcast.to(data.room).emit('start',map[roomid].isStart);
-                }
-            }
-        });*/
 
 
         socket.on('update', (data) => {
@@ -310,62 +282,11 @@ io.on('connection', function (socket) {
                     }
                 }
             );
-            /*con.query(sql, function (err, rs) {
-                if (err) {
-                    console.log('err');
-                } else {
-                    user = rs[0].user1;
-                    user2 = rs[0].user2;
-                    user3 = rs[0].user3;
-                    number = rs[0].num;
-                    switch (data.user) {
-                        case user:
-                            con.query(sql1, function (err) {
-                                if (err) {
-                                    console.log('err');
-                                } else {
-                                    socket.leave(data.room);
-                                    delete gameuser[roomid][data.user];
-                                }
-                            });
-                            break;
-                        case user2:
-                            con.query(sql2, function (err) {
-                                if (err) {
-                                    console.log('err');
-                                } else {
-                                    socket.leave(data.room);
-                                    delete gameuser[roomid][data.user];
-                                }
-                            });
-                            break;
-                        case user3:
-                            con.query(sql3, function (err) {
-                                if (err) {
-                                    console.log('err');
-                                } else {
-                                    socket.leave(data.room);
-                                    delete gameuser[roomid][data.user];
-                                }
-                            });
-                            break;
-                    }
-                    if (number === 1) {
-                        con.query(deleteSQl, function (err) {
-                            if (err) {
-                                console.log('err');
-                                delete gameuser[roomid];
-                                delete map[roomid];
-                            }
-                        });
-                    }
 
-                }
-            });*/
             console.log("与服务器断开");
             socket.broadcast.to(data.room).emit('disconnection', data.user);
 
-        });//包括自己
+        });
     });
 
 
