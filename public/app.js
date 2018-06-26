@@ -10,7 +10,7 @@ var session = require('express-session');
 var bodyparser = require('body-parser');
 
 var neo4j = require('node-neo4j');
-db = new neo4j('http://neo4j:neo4jLZY@localhost:7474');
+db = new neo4j('http://neo4j:123456@localhost:7474');
 
 
 app.use(bodyparser.json()); // 使用bodyparder中间件，
@@ -207,7 +207,6 @@ app.get('/hall.html/add', function (req, res) {
         }, function (err, result) {
             if (err) {
                 console.log("err");
-                console.log(result.data + '\n\n');
             } else {
                 gender = result.data[0];
             }
