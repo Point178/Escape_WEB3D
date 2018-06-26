@@ -84,7 +84,7 @@ app.get('/chooseCharacter.html/male', function (req, res) {
             if (err) {
                 return console.log(err);
             } else {
-                res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
+                res.redirect(301, 'http://localhost:8888/hall.html?gender=male&name=' + req.session.userName);
             }
         }
     );
@@ -99,7 +99,7 @@ app.get('/chooseCharacter.html/female', function (req, res) {
             if (err) {
                 return console.log(err);
             } else {
-                res.redirect(301, 'http://localhost:8888/hall.html?name=' + req.session.userName);
+                res.redirect(301, 'http://localhost:8888/hall.html?gender=female&name=' + req.session.userName);
             }
         }
     );
@@ -356,7 +356,7 @@ app.post('/login', function (req, res) {
                 if (result.data.length == 0) {
                     res.redirect(301, 'http://localhost:8888/login.html?state=fail');
                 } else {
-                    res.redirect(301, 'http://localhost:8888/hall.html?name=' + name);
+                    res.redirect(301, 'http://localhost:8888/hall.html?gender='+result.data+'&name=' + name);
                 }
             }
         }
