@@ -36,35 +36,44 @@
         </script>
         <div id="buttons">
             <script>
+                var flag = 1;
                 var url = decodeURI(window.location.href);
                 var argsIndex = url.split("&name=");
                 document.write("<button id=\"characterButton\" class=\"btn btn-primary block full-width m-b\" onclick=\"location='chooseCharacter.html?name='+argsIndex[1]\">修改角色</button>");
                 document.write("<button id=\"passwordButton\" class=\"btn btn-primary block full-width m-b\" onclick=\"location='password.html'\">修改密码</button>");
-                document.write("<button id=\"showButton\" class=\"btn btn-primary block full-width m-b\" onclick=f()>显示房间</button>");
+                document.write("<button id=\"showButton\" class=\"btn btn-primary block full-width m-b\"  onclick=f()>显示房间</button>");
+
+
             </script>
         </div>
     </div>
     <div id="content">
         <script>
             function f() {
+
                 $.getJSON("json",
                     function (msg) {
-                        var data=msg.data;
-                        for(var i = 0; i < data.length; i++) {
-                            var id = data[i][0];
-                            var number=data[i][1];
-                            var status=data[i][2];
-                            var sta;
-                            if (status==0) {
-                                sta="准备中";
-                            }
-                            else if(status==1){
-                                sta="已开始";
-                            }
+                        if(flag==1) {
+                            var data = msg.data;
+                            for (var i = 0; i < data.length; i++) {
+                                var id = data[i][0];
+                                var number = data[i][1];
+                                var status = data[i][2];
+                                var sta;
+                                if (status == 0) {
+                                    sta = "准备中";
+                                }
+                                else if (status == 1) {
+                                    sta = "已开始";
+                                }
 
-                            document.getElementById('div').innerHTML+="<div class='roomdiv'><button class='room' onclick=\"location='hall.html/add?name="+id+"'\"></button><div class='roomInfo'>"+id+"："+number+"人 "+sta+"</div></div>";
+                                document.getElementById('div').innerHTML += "<div class='roomdiv'><button class='room' onclick=\"location='hall.html/add?name=" + id + "'\"></button><div class='roomInfo'>" + id + "：" + number + "人 " + sta + "</div></div>";
+                            }
+                            flag = 0;
                         }
+
                     });
+
             }
 
         </script>
