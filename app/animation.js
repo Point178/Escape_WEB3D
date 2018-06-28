@@ -399,11 +399,6 @@ module.exports = function () {
             z: Math.PI / 2
         }, 2000).easing(TWEEN.Easing.Elastic.Out).start();
 
-        var score = [];
-        for (var i = 0; i < players.length; i++) {
-            score.add(data.get(players[i].username));
-        }
-
         //TODO display as message
         showMessage("SYSTEM", "WIN!!");
         addMsg("SYSTEM", "WIN!!");
