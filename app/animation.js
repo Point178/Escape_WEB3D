@@ -23,7 +23,7 @@ module.exports = function () {
     var userName = argsIndex[0];
     var gender = argsIndex[1];
     const io = require('socket.io-client');
-    var socket = io('http://0.0.0.0:3000/');
+    var socket = io('http://127.0.0.1:3000/');
 
     let players = [];
     let isKey = false;
@@ -221,6 +221,11 @@ module.exports = function () {
     function animate() {
         if (controlsEnabled === true) {
             user.tick(pitchObject, yawObject, objects);
+            for(var i = 0; i < players.length; i++){
+                if(players[i].user !== undefined){
+                    players[i].playerTick();
+                }
+            }
             TWEEN.update();
             renderer.render(scene, camera);
 
@@ -240,7 +245,7 @@ module.exports = function () {
             gender: gender,
             position:[0, 10, 350],
             rotation:[0,0,0],
-            //objects:"",
+            //players:"",
             cb: start
         });
     }
@@ -349,8 +354,6 @@ module.exports = function () {
             gender: obj.gender,
             position:obj.position,
             rotation:obj.rotation,
-            //players: players,
-            //objects: objects,
             cb: ""
         });
         players.push(player);
@@ -362,16 +365,17 @@ module.exports = function () {
 
     socket.on('update', (obj) => {
         var i = 0;
-        console.log('receive update position');
         while (i < players.length) {
             if (players[i].username === obj.username) {
-                //if(obj.position[0] === players[i].user.position.x && obj.position[1] ===
-                //    players[i].user.position.y && obj.position[2] === players[i].user.position.z){
-                //    players[i].stop();
-                //}else {
-                    players[i].setLocation(obj.position, obj.rotation);
-                //    players[i].walk();
-                //}
+                if(players[i].user !== undefined) {
+                    if (obj.position[0] === players[i].user.position.x && obj.position[1] ===
+                        players[i].user.position.y && obj.position[2] === players[i].user.position.z) {
+                        players[i].stop();
+                    } else {
+                        players[i].setLocation(obj.position, obj.rotation);
+                        players[i].walk();
+                    }
+                }
                 break;
             }
             i++;

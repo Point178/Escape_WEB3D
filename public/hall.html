@@ -52,7 +52,7 @@
 
                 $.getJSON("json",
                     function (msg) {
-                        document.getElementById('div').innerHTML = "";
+                        document.getElementById('div').innerHTML="";
                             var data = msg.data;
                             for (var i = 0; i < data.length; i++) {
                                 var id = data[i][0];
@@ -68,6 +68,7 @@
 
                                 document.getElementById('div').innerHTML += "<div class='roomdiv'><button class='room' onclick=\"location='hall.html/add?name=" + id + "'\"></button><div class='roomInfo'>" + id + "：" + number + "人 " + sta + "</div></div>";
                             }
+
                     });
 
             }

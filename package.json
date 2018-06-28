@@ -5,8 +5,7 @@
   "main": "app/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.prod.js",
-    "server": "webpack-dev-server --open --config webpack.dev.js"
+    "server": "webpack-dev-server --open"
   },
   "author": "point178",
   "license": "ISC",
