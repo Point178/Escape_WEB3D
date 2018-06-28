@@ -10,7 +10,7 @@ var session = require('express-session');
 var bodyparser = require('body-parser');
 
 var neo4j = require('node-neo4j');
-db = new neo4j('http://neo4j:123456@localhost:7474');
+db = new neo4j('http://neo4j:neo4jLZY@localhost:7474');
 
 
 app.use(bodyparser.json()); // 使用bodyparder中间件，

@@ -34,8 +34,6 @@ module.exports = function () {
     let isChatDisplay;
     let t;
 
-    let sound;
-
     function initScene() {
         scene = new THREE.Scene();
     }
@@ -58,17 +56,6 @@ module.exports = function () {
         yawObject.rotation.y = Math.PI;
         yawObject.position.set(0, 200, 280);
         scene.add(yawObject);
-    }
-
-    function initSound(){
-        var listener = new THREE.AudioListener();
-        camera.add( listener );
-        sound = new THREE.Audio( listener );
-        new THREE.AudioLoader().load( 'image/4834.mp3', function( buffer ) {
-            sound.setBuffer( buffer );
-            sound.setLoop( false );
-            sound.setVolume( 0.5 );
-        });
     }
 
     document.body.addEventListener('keydown', function (e) {
