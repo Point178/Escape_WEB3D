@@ -36,7 +36,6 @@
         </script>
         <div id="buttons">
             <script>
-                var flag = 1;
                 var url = decodeURI(window.location.href);
                 var argsIndex = url.split("&name=");
                 document.write("<button id=\"characterButton\" class=\"btn btn-primary block full-width m-b\" onclick=\"location='chooseCharacter.html?name='+argsIndex[1]\">修改角色</button>");
@@ -53,7 +52,7 @@
 
                 $.getJSON("json",
                     function (msg) {
-                        if(flag==1) {
+                        document.getElementById('div').innerHTML = "";
                             var data = msg.data;
                             for (var i = 0; i < data.length; i++) {
                                 var id = data[i][0];
@@ -69,9 +68,6 @@
 
                                 document.getElementById('div').innerHTML += "<div class='roomdiv'><button class='room' onclick=\"location='hall.html/add?name=" + id + "'\"></button><div class='roomInfo'>" + id + "：" + number + "人 " + sta + "</div></div>";
                             }
-                            flag = 0;
-                        }
-
                     });
 
             }
