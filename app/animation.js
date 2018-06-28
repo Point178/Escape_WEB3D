@@ -23,7 +23,7 @@ module.exports = function () {
     var userName = argsIndex[0];
     var gender = argsIndex[1];
     const io = require('socket.io-client');
-    var socket = io('http://0.0.0.0:3000/');
+    var socket = io('http://127.0.0.1:3000/');
 
     let players = [];
     let isKey = false;
