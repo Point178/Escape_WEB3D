@@ -5,7 +5,11 @@ var server = require('http').createServer(app),
     io = require('socket.io').listen(server)
 
 var neo4j = require('node-neo4j');
+<<<<<<< HEAD
 db = new neo4j('http://neo4j:neo4jLZY@localhost:7474');
+=======
+db = new neo4j('http://neo4j:123456@localhost:7474');
+>>>>>>> parent of 69b5bbec... 删除无用注释
 
 server.listen(3000);
 var map = {};
