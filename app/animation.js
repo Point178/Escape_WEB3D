@@ -401,12 +401,8 @@ module.exports = function () {
         }
 
         //TODO display as message
-<<<<<<< HEAD
         showMessage("SYSTEM", "WIN!!");
         addMsg("SYSTEM", "WIN!!");
-        sound.play();
-=======
->>>>>>> parent of 69b5bbec... 删除无用注释
     });
 
     socket.on('hint', (data) =>{
