@@ -23,7 +23,7 @@ module.exports = function () {
     var userName = argsIndex[0];
     var gender = argsIndex[1];
     const io = require('socket.io-client');
-    var socket = io('http://127.0.0.1:3000/');
+    var socket = io('http://0.0.0.0:3000/');
 
     let players = [];
     let isKey = false;
@@ -33,6 +33,8 @@ module.exports = function () {
     let isFloatDisplay;
     let isChatDisplay;
     let t;
+
+    let sound;
 
     function initScene() {
         scene = new THREE.Scene();
@@ -56,6 +58,17 @@ module.exports = function () {
         yawObject.rotation.y = Math.PI;
         yawObject.position.set(0, 200, 280);
         scene.add(yawObject);
+    }
+
+    function initSound(){
+        var listener = new THREE.AudioListener();
+        camera.add( listener );
+        sound = new THREE.Audio( listener );
+        new THREE.AudioLoader().load( 'image/4834.mp3', function( buffer ) {
+            sound.setBuffer( buffer );
+            sound.setLoop( false );
+            sound.setVolume( 0.5 );
+        });
     }
 
     document.body.addEventListener('keydown', function (e) {
@@ -407,6 +420,7 @@ module.exports = function () {
         //TODO display as message
         showMessage("SYSTEM", "WIN!!");
         addMsg("SYSTEM", "WIN!!");
+        sound.play();
     });
 
     socket.on('hint', (data) =>{

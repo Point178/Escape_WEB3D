@@ -22,7 +22,7 @@ devServer: {
 contentBase: "./public",
 historyApiFallback: true,
 inline: true,
-host: '127.0.0.1',
+host: '0.0.0.0',
 compress: true,
 port: 8888
 },
