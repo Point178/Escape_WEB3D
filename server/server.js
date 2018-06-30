@@ -5,7 +5,7 @@ var server = require('http').createServer(app),
     io = require('socket.io').listen(server)
 
 var neo4j = require('node-neo4j');
-db = new neo4j('http://neo4j:CHENxindian178@localhost:7474');
+db = new neo4j('http://neo4j:neo4jLZY@localhost:7474');
 
 server.listen(3000);
 var map = {};
@@ -290,6 +290,3 @@ io.on('connection', function (socket) {
 
 
 });
-
-
-

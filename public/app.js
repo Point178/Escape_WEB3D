@@ -52,7 +52,7 @@ app.get('/register', function (req, res) {
             } else {
                 console.log(result.data);
                 if (result.data.length > 0) {
-                    res.redirect(301, 'http://52.83.171.185:8888/register.html?state=fail');
+                    res.redirect(301, 'http://52.83.171.185:9753/register.html?state=fail');
                 } else {
                     db.cypherQuery(
                         'CREATE (somebody:User { name: {name}, password: {password}, gender:0}) RETURN somebody',
@@ -63,7 +63,7 @@ app.get('/register', function (req, res) {
                             if (err1) {
                                 return console.log(err);
                             } else {
-                                res.redirect(301, 'http://52.83.171.185:8888/chooseCharacter.html?name=' + name);
+                                res.redirect(301, 'http://52.83.171.185:9753/chooseCharacter.html?name=' + name);
                             }
                         }
                     );
@@ -82,7 +82,7 @@ app.get('/chooseCharacter.html/male', function (req, res) {
             if (err) {
                 return console.log(err);
             } else {
-                res.redirect(301, 'http://52.83.171.185:8888/hall.html?gender=male&name=' + req.session.userName);
+                res.redirect(301, 'http://52.83.171.185:9753/hall.html?gender=male&name=' + req.session.userName);
             }
         }
     );
@@ -97,7 +97,7 @@ app.get('/chooseCharacter.html/female', function (req, res) {
             if (err) {
                 return console.log(err);
             } else {
-                res.redirect(301, 'http://52.83.171.185:8888/hall.html?gender=female&name=' + req.session.userName);
+                res.redirect(301, 'http://52.83.171.185:9753/hall.html?gender=female&name=' + req.session.userName);
             }
         }
     );
@@ -167,7 +167,7 @@ app.post('/start', function (req, res) {
             } else {
                 console.log(result.data);
                 if (result.data.length > 0) {
-                    res.redirect(301, 'http://52.83.171.185:8888/startroom.html?state=fail');
+                    res.redirect(301, 'http://52.83.171.185:9753/startroom.html?state=fail');
                 } else {
                     db.cypherQuery(
                         'CREATE (room:Room { id: {id}, num:1, user1:{user1}, user2:null,user3:null,status:0}) RETURN room',
@@ -179,10 +179,10 @@ app.post('/start', function (req, res) {
                                 return console.log(err);
                             } else {
                                 const io = require('socket.io-client');
-                                var socket = io('http://0.0.0.0:3000');
+                                var socket = io('http://52.83.171.185:3000');
                                 var data = {room: roomid};
                                 socket.emit('room', data);
-                                res.redirect(301, 'http://52.83.171.185:8888/game.html?name=' + roomid + '&user=' + req.session.userName + '&gender=' + gender);
+                                res.redirect(301, 'http://52.83.171.185:9753/game.html?name=' + roomid + '&user=' + req.session.userName + '&gender=' + gender);
                             }
                         }
                     );
@@ -253,7 +253,7 @@ app.get('/hall.html/add', function (req, res) {
                                                         }
                                                     );
                                                 }
-                                                res.redirect(301, 'http://52.83.171.185:8888/game.html?name=' + id + '&user=' + req.session.userName + '&gender=' + gender);
+                                                res.redirect(301, 'http://52.83.171.185:9753/game.html?name=' + id + '&user=' + req.session.userName + '&gender=' + gender);
 
                                             }
                                         }
@@ -288,7 +288,7 @@ app.get('/hall.html/add', function (req, res) {
                                                                         }
                                                                     );
                                                                 }
-                                                                res.redirect(301, 'http://52.83.171.185:8888/game.html?name=' + id + '&user=' + req.session.userName + '&gender=' + gender);
+                                                                res.redirect(301, 'http://52.83.171.185:9753/game.html?name=' + id + '&user=' + req.session.userName + '&gender=' + gender);
 
                                                             }
                                                         }
@@ -317,7 +317,7 @@ app.get('/hall.html/add', function (req, res) {
                                                                         }
                                                                     );
                                                                 }
-                                                                res.redirect(301, 'http://52.83.171.185:8888/game.html?name=' + id + '&user=' + req.session.userName + '&gender=' + gender);
+                                                                res.redirect(301, 'http://52.83.171.185:9753/game.html?name=' + id + '&user=' + req.session.userName + '&gender=' + gender);
                                                             }
                                                         }
                                                     );
@@ -330,7 +330,7 @@ app.get('/hall.html/add', function (req, res) {
                         }
                     );
                 } else {
-                    res.redirect(301, 'http://52.83.171.185:8888/hall.html?name=' + req.session.userName);
+                    res.redirect(301, 'http://52.83.171.185:9753/hall.html?name=' + req.session.userName);
                 }
             }
         }
@@ -351,9 +351,9 @@ app.post('/login', function (req, res) {
                 console.log("login err");
             } else {
                 if (result.data.length == 0) {
-                    res.redirect(301, 'http://52.83.171.185:8888/login.html?state=fail');
+                    res.redirect(301, 'http://52.83.171.185:9753/login.html?state=fail');
                 } else {
-                    res.redirect(301, 'http://52.83.171.185:8888/hall.html?gender='+result.data+'&name=' + name);
+                    res.redirect(301, 'http://52.83.171.185:9753/hall.html?gender='+result.data+'&name=' + name);
                 }
             }
         }
@@ -362,9 +362,9 @@ app.post('/login', function (req, res) {
 app.get('/logout', function (req, res) {
     delete req.session.id;
     delete req.session.userName; // 删除session
-    res.redirect(301, 'http://52.83.171.185:8888/login.html');
+    res.redirect(301, 'http://52.83.171.185:9753/login.html');
 });
 
-var server = http.createServer(app).listen(8888, function () {
+var server = http.createServer(app).listen(9753, function () {
     console.log("start");
 });

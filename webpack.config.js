@@ -22,12 +22,12 @@ devServer: {
 contentBase: "./public",
 historyApiFallback: true,
 inline: true,
-host: '127.0.0.1',
+host: '0.0.0.0',
 compress: true,
-port: 8888
+port: 9753
 },
-devtool: 'cheap-source-map',
-mode: 'development',
+devtool: false,
+//mode: 'development',
 module: {
 rules: [
 {

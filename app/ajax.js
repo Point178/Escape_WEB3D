@@ -3,7 +3,7 @@ $(function(){
         var info = $('form').serialize();
         $.ajax({
             type:"get",
-            url:"http://127.0.0.1:8888",
+            url:"http://52.83.171.185:9753",
             data:info,
             success:function(response,status,xhr){
                 alert(response);
